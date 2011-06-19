@@ -1,0 +1,170 @@
+#!/usr/bin/python
+import os, sys, time, re
+from stat import *
+#import MySQLdb as sql
+from optparse import OptionParser
+
+MYSQLCMD = 'mysql -u rhaleblian -h mustard -D media'
+
+def escape(expr):
+    return re.sub('\'','\\\'',expr)
+
+def month(abbrev):
+	ab = ('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec')
+	for i in range(0,11):
+	    if ab[i] == abbrev:
+	        return i+1
+	return None
+
+def sql(args):
+	(disc,) = args
+
+	path = '/Volumes/%s' % disc
+        os.chdir(path)
+	print 'use media;'
+	for root, dirs, files in os.walk('.'):
+		for file in files:
+			try:
+				st = os.stat(root + "/" + file)
+			except:
+				pass
+
+			t = time.strftime("%Y-%m-%d",
+				time.localtime(st.st_mtime))
+			sql = "insert into disc (name) values ("
+			sql += "'" + escape(disc) + "');\n"
+			sql = "insert into file (file,dir,disc,bytes,mtime) values ("
+			sql += "'" + escape(file) + "',"
+			sql += "'" + escape(root) + "',"
+			sql += "'" + disc + "',"
+			sql += "'" + "%d" % st.st_size + "',"
+			sql += "'%s'" % t
+			sql += ");"
+			print sql
+
+def grep(args):
+	field = 'file'
+	pattern = '%'
+	if len(args) == 1:
+		(pattern,) = args
+	elif len(args) == 2:
+		(field, pattern) = args
+	else:
+		print 'grep field pattern'
+		return
+
+        cmd = """use media;
+select disc.label,file.dir,file.name from disc inner join file
+on disc.id = file.disc_id"""
+        if field == 'dir':
+            cmd += " where dir.name like "
+        elif field == 'disc':
+            cmd += " where disc.label like "
+        else:
+            cmd += " where file.name like "
+        cmd += "'%%%s%%';" % pattern
+	print cmd
+
+	os.system('echo "%s" | %s' % (cmd,MYSQLCMD))
+
+'''
+def insert(args):
+	(catalog, doit) = args
+	discname = re.sub('\.txt$','',catalog)
+	year = time.gmtime(os.stat(catalog)[ST_MTIME])[0]
+
+	db = sql.connect()
+	c = db.cursor()
+	c.execute('use media')
+
+	print('Inserting data from %s as disc %s' % (catalog,discname))
+	FILE = open(catalog,'r')
+	if FILE == None:
+		exit(2)
+	for line in FILE.readlines():
+		pathname = ''
+		filename = ''
+		foldername = ''
+		modified = ''
+		bytesize = ''
+		missing = 0
+
+		line = re.sub('^\s+','',line)
+		if re.match('^[\./]',line):
+		    pathname = line[0:len(line)-1]
+
+		else:
+		    fields = line.split()
+		    #print fields
+		    if len(fields) < 10:
+		        continue
+
+		    match = re.search('[\./](.*)',line)
+		    pathname = match.group(0)
+
+		    bytesize = fields[6]
+		    y,m,d,t = '','','',''
+
+		    if re.match('.+:.+',fields[9]):
+		        y = year
+		        t = fields[9] + ':00'
+		    else:
+		        y = fields[9]
+		        t = '00:00:00'
+		    if re.match('[A-Z][a-z][a-z]',fields[7]):
+		        m = month(fields[7])
+		        d = fields[8]
+		    else:
+		        m = month(fields[8])
+		        d = fields[7]
+		    modified = '%s-%s-%s %s' % (y,m,d,t)
+		    
+		    if len(pathname) == 0:
+		        continue
+
+		    if re.match('d',fields[2]):
+		        foldername = pathname
+
+		if foldername == '':
+		    m = re.search('^(.+)?/([^/]+)$',pathname)
+		    if m:
+		        g = m.groups()
+		        if g[0]:
+		            foldername = g[0]
+		        filename = g[1]
+
+		print discname,foldername,filename,modified,bytesize
+
+		if int(doit) > 0:
+		    if int(doit) == 2:
+		        missing = 1
+		    rc = c.execute("""insert into file values (%s,%s,%s,%s,%s,%s)""",(discname,foldername,filename,modified,bytesize,missing))
+		    print rc
+		    print(c.fetchall())
+
+	FILE.close()
+'''
+
+parser = OptionParser(usage="""
+disc <command> <command-args>
+
+Commands:
+  grep <term>       print any rows containing term
+  sql <discname>    output sql index of disc with discname
+  eject             eject disc
+""")
+(options,args) = parser.parse_args()
+
+if len(args) < 1:
+    parser.print_help()
+    exit(1)
+
+command = sys.argv[1]
+if command == 'grep':
+    grep(sys.argv[2:])
+elif command == 'sql':
+    sql(sys.argv[2:])
+elif command == 'eject':
+    eject(sys.argv[2:])
+else:
+    print 'unsupported command %s' % command
