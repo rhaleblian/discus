@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ContentFilters</key>
+	<dict/>
+	<key>auto_connect</key>
+	<true/>
+	<key>data</key>
+	<dict>
+		<key>connection</key>
+		<dict>
+			<key>database</key>
+			<string>media</string>
+			<key>host</key>
+			<string>mustard</string>
+			<key>name</key>
+			<string>rhaleblian@mustard</string>
+			<key>type</key>
+			<string>SPTCPIPConnection</string>
+			<key>user</key>
+			<string>rhaleblian</string>
+		</dict>
+		<key>session</key>
+		<dict>
+			<key>connectionEncoding</key>
+			<string>utf8</string>
+			<key>contentFilter</key>
+			<dict/>
+			<key>contentPageNumber</key>
+			<integer>1</integer>
+			<key>contentSortColIsAsc</key>
+			<true/>
+			<key>contentViewport</key>
+			<string>{{0, 0}, {587, 454}}</string>
+			<key>isToolbarVisible</key>
+			<true/>
+			<key>table</key>
+			<string>file</string>
+			<key>view</key>
+			<string>SP_VIEW_CONTENT</string>
+		</dict>
+	</dict>
+	<key>encrypted</key>
+	<false/>
+	<key>format</key>
+	<string>connection</string>
+	<key>queryFavorites</key>
+	<array/>
+	<key>queryHistory</key>
+	<array>
+		<string>select disc,dir,file from file where disc like '%dos%'</string>
+		<string>select disc from file group by discselect disc,dir,file from file where disc like '%dos%'</string>
+		<string>select disc from file group by disc</string>
+		<string>delete from file where dir like '%/Volumes/software-5%'</string>
+		<string>'</string>
+		<string>select * from file where disc like '%software%'</string>
+		<string>select * from file</string>
+		<string>select *</string>
+		<string>select file where file contains 'a'</string>
+		<string>select file where file like 'a'</string>
+		<string>select file where file like '%a%'</string>
+		<string>select file where file like '%microsoft%'</string>
+		<string>select disc,dir,file from file where dir like '%untit%'</string>
+		<string>select disc,dir,file from file where dir like '%dos%'</string>
+		<string>select disc,dir,file from file where dir like '%dos%' order by disc</string>
+		<string>select disc,dir,file from file where dir like '%virt%'</string>
+		<string>select disc,dir,file from file where disk like '%virt%'</string>
+		<string>select disc,dir,file from file where disk like '%vm%'</string>
+		<string>select disc,dir,file from file where file like '%9x%'</string>
+		<string>select disc,dir,file from file where dir like '%9x%'</string>
+	</array>
+	<key>rdbms_type</key>
+	<string>mysql</string>
+	<key>rdbms_version</key>
+	<string>5.1.37-1ubuntu5.4</string>
+	<key>version</key>
+	<integer>1</integer>
+</dict>
+</plist>
