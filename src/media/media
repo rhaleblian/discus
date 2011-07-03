@@ -20,51 +20,51 @@ def connect():
                            db='media')
 
 def add(args, debug=True):
+    """ Add disc contents to index. """
 	(disc,) = args
 
-        # Allow passing the disc name
-        # or a path to the mountpoint.
+    # Allow passing the disc name
+    # or a path to the mountpoint.
 
-	path = '/Volumes/%s/' % disc
-        m = re.match('/Volumes/(\w+)/?', disc)
-        if m:
-            path = os.path.join(disc) + "/"
-            disc = m.group(1)
-	if not os.path.exists(path):
-		return
+    path = '/Volumes/%s/' % disc
+    m = re.match('/Volumes/(\w+)/?', disc)
+    if m:
+        path = os.path.join(disc) + "/"
+        disc = m.group(1)
+    if not os.path.exists(path):
+        return
 
-        connection = connect()
-        cursor = connection.cursor()
-        d_query = """insert into disc (label, format, status)
+    connection = connect()
+    cursor = connection.cursor()
+    sql = """insert into disc (label, format, status)
 values ('%s', NULL, 0);""" % escape(disc)
-        rows = cursor.execute(d_query)
-        #if not rows:
-        #    return
-        iid = cursor.lastrowid
+    rows = cursor.execute(sql)
+    iid = cursor.lastrowid
 
-        walkroot = path
-        sql = ""
+    walkroot = path
+    sql = ""
 	for root, dirs, files in os.walk(walkroot):
-            for file in files:
-                try:
-                    st = os.stat(root + "/" + file)
-                except:
-                    pass
-                
-                root = re.sub(path, '', root)
-                t = time.strftime("%Y-%m-%d",
-                                  time.localtime(st.st_mtime))
-                sql += """insert into file (name,dir,disc_id,bytes,mtime)
-values ('%s','%s',%d,'%s','%s');
-""" % (escape(file),
-       escape(root),
-       iid,
-       st.st_size,
-       t)
-
-        rows = cursor.execute(sql)
+        for file in files:
+            try:
+                st = os.stat(root + "/" + file)
+            except:
+                pass
+            
+            root = re.sub(path, '', root)
+            t = time.strftime("%Y-%m-%d",
+                              time.localtime(st.st_mtime))
+            sql += """insert into file
+                (name,dir,disc_id,bytes,mtime)
+                values ('%s','%s',%d,'%s','%s');
+                """ % (escape(file),
+                       escape(root),
+                       iid,
+                       st.st_size,
+                       t)
+    rows = cursor.execute(sql)
 
 def search(args):
+    """ Return rows in index containing pattern. """
 	field = 'file'
 	pattern = '%'
 	if len(args) == 1:
@@ -75,14 +75,14 @@ def search(args):
 		return
 
         cmd  = """select disc.label,file.dir,file.name from disc
-        inner join file on disc.id = file.disc_id"""
+        inner join file on disc.id = file.disc_id where """
         if field == 'dir':
-            cmd += " where dir.name like "
+            cmd += "dir.name"
         elif field == 'disc':
-            cmd += " where disc.label like "
+            cmd += "disc.label"
         else:
-            cmd += " where file.name like "
-        cmd += "'%%%s%%';" % pattern
+            cmd += "file.name"
+        cmd += " like '%%%s%%';" % pattern
 	print cmd
 
 	connection = connect()
@@ -164,7 +164,8 @@ def insert(args):
 		if int(doit) > 0:
 		    if int(doit) == 2:
 		        missing = 1
-		    rc = c.execute("""insert into file values (%s,%s,%s,%s,%s,%s)""",(discname,foldername,filename,modified,bytesize,missing))
+		    rc = c.execute("""insert into file values (%s,%s,%s,%s,%s,%s)""",
+                           (discname,foldername,filename,modified,bytesize,missing))
 		    print rc
 		    print(c.fetchall())
 
