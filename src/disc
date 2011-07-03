@@ -87,13 +87,12 @@ inner join file on disc.id = file.disc_id"""
 	for row in rows:
 		print row
 
-'''
 def insert(args):
 	(catalog, doit) = args
 	discname = re.sub('\.txt$','',catalog)
 	year = time.gmtime(os.stat(catalog)[ST_MTIME])[0]
 
-	db = sql.connect()
+	db = connect()
 	c = db.cursor()
 	c.execute('use media')
 
@@ -163,7 +162,6 @@ def insert(args):
 		    print(c.fetchall())
 
 	FILE.close()
-'''
 
 parser = OptionParser(usage="""
 disc <command> <command-args>
