@@ -4,58 +4,65 @@ from stat import *
 from optparse import OptionParser
 import pymysql
 
-MYSQLCMD = 'mysql -u rhaleblian -h mustard -D media'
-
 def escape(expr):
     return re.sub('\'','\\\'',expr)
 
 def month(abbrev):
-	ab = ('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec')
-	for i in range(0,11):
-	    if ab[i] == abbrev:
-	        return i+1
-	return None
-
+    ab = ('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec')
+    for i in range(0,11):
+        if ab[i] == abbrev:
+            return i+1
+    return None
+    
 def connect():
-	return pymysql.connect(host='mustard',
-		user='rhaleblian',
-		db='media')
+    return pymysql.connect(host='mustard',
+                           user='rhaleblian',
+                           db='media')
 
 def add(args, debug=True):
 	(disc,) = args
-	query = ""
-	path = '/Volumes/%s' % disc
+
+        # Allow passing the disc name
+        # or a path to the mountpoint.
+
+	path = '/Volumes/%s/' % disc
+        m = re.match('/Volumes/(\w+)/?', disc)
+        if m:
+            path = os.path.join(disc) + "/"
+            disc = m.group(1)
 	if not os.path.exists(path):
 		return
-        os.chdir(path)
-	for root, dirs, files in os.walk('.'):
-		for file in files:
-			try:
-				st = os.stat(root + "/" + file)
-			except:
-				pass
 
-			t = time.strftime("%Y-%m-%d",
-				time.localtime(st.st_mtime))
-			sql = "insert into disc (name) values ("
-			sql += "'" + escape(disc) + "');\n"
-			sql = "insert into file (file,dir,disc,bytes,mtime) values ("
-			sql += "'" + escape(file) + "',"
-			sql += "'" + escape(root) + "',"
-			sql += "'" + disc + "',"
-			sql += "'" + "%d" % st.st_size + "',"
-			sql += "'%s'" % t
-			sql += ");"
-			#print sql
-			query += sql
+        connection = connect()
+        cursor = connection.cursor()
+        d_query = """insert into disc (label, format, status)
+values ('%s', NULL, 0);""" % escape(disc)
+        rows = cursor.execute(d_query)
+        #if not rows:
+        #    return
+        iid = cursor.lastrowid
 
-	if debug:
-		print query
-	else:
-		connection = connect()
-		cursor = connection.cursor()
-		rows = cursor.execute(query)
-		print rows
+        walkroot = path
+        sql = ""
+	for root, dirs, files in os.walk(walkroot):
+            for file in files:
+                try:
+                    st = os.stat(root + "/" + file)
+                except:
+                    pass
+                
+                root = re.sub(path, '', root)
+                t = time.strftime("%Y-%m-%d",
+                                  time.localtime(st.st_mtime))
+                sql += """insert into file (name,dir,disc_id,bytes,mtime)
+values ('%s','%s',%d,'%s','%s');
+""" % (escape(file),
+       escape(root),
+       iid,
+       st.st_size,
+       t)
+
+        rows = cursor.execute(sql)
 
 def search(args):
 	field = 'file'
@@ -65,11 +72,10 @@ def search(args):
 	elif len(args) == 2:
 		(field, pattern) = args
 	else:
-		print 'grep field pattern'
 		return
 
-        cmd = """select disc.label,file.dir,file.name from disc 
-inner join file on disc.id = file.disc_id"""
+        cmd  = """select disc.label,file.dir,file.name from disc
+        inner join file on disc.id = file.disc_id"""
         if field == 'dir':
             cmd += " where dir.name like "
         elif field == 'disc':
@@ -79,7 +85,6 @@ inner join file on disc.id = file.disc_id"""
         cmd += "'%%%s%%';" % pattern
 	print cmd
 
-	#os.system('echo "%s" | %s' % (cmd,MYSQLCMD))
 	connection = connect()
 	cursor = connection.cursor()
 	rows = cursor.execute(cmd)
