@@ -1,4 +1,8 @@
 #!/usr/bin/python
+"""
+    Operations on media library index.
+    Shell script.
+"""
 import os, sys, time, re
 from stat import *
 from optparse import OptionParser
@@ -93,83 +97,6 @@ def search(args):
 	rows = cursor.fetchall()
 	for row in rows:
 		print row
-
-def insert(args):
-	(catalog, doit) = args
-	discname = re.sub('\.txt$','',catalog)
-	year = time.gmtime(os.stat(catalog)[ST_MTIME])[0]
-
-	db = connect()
-	c = db.cursor()
-	c.execute('use media')
-
-	print('Inserting data from %s as disc %s' % (catalog,discname))
-	FILE = open(catalog,'r')
-	if FILE == None:
-		exit(2)
-	for line in FILE.readlines():
-		pathname = ''
-		filename = ''
-		foldername = ''
-		modified = ''
-		bytesize = ''
-		missing = 0
-
-		line = re.sub('^\s+','',line)
-		if re.match('^[\./]',line):
-		    pathname = line[0:len(line)-1]
-
-		else:
-		    fields = line.split()
-		    #print fields
-		    if len(fields) < 10:
-		        continue
-
-		    match = re.search('[\./](.*)',line)
-		    pathname = match.group(0)
-
-		    bytesize = fields[6]
-		    y,m,d,t = '','','',''
-
-		    if re.match('.+:.+',fields[9]):
-		        y = year
-		        t = fields[9] + ':00'
-		    else:
-		        y = fields[9]
-		        t = '00:00:00'
-		    if re.match('[A-Z][a-z][a-z]',fields[7]):
-		        m = month(fields[7])
-		        d = fields[8]
-		    else:
-		        m = month(fields[8])
-		        d = fields[7]
-		    modified = '%s-%s-%s %s' % (y,m,d,t)
-		    
-		    if len(pathname) == 0:
-		        continue
-
-		    if re.match('d',fields[2]):
-		        foldername = pathname
-
-		if foldername == '':
-		    m = re.search('^(.+)?/([^/]+)$',pathname)
-		    if m:
-		        g = m.groups()
-		        if g[0]:
-		            foldername = g[0]
-		        filename = g[1]
-
-		print discname,foldername,filename,modified,bytesize
-
-		if int(doit) > 0:
-		    if int(doit) == 2:
-		        missing = 1
-		    rc = c.execute("""insert into file values (%s,%s,%s,%s,%s,%s)""",
-                           (discname,foldername,filename,modified,bytesize,missing))
-		    print rc
-		    print(c.fetchall())
-
-	FILE.close()
 
 parser = OptionParser(usage="""
 media <command> <command-args>
