@@ -21,10 +21,12 @@ def connect():
 		user='rhaleblian',
 		db='media')
 
-def sql(args, debug=True):
+def add(args, debug=True):
 	(disc,) = args
 	query = ""
 	path = '/Volumes/%s' % disc
+	if not os.path.exists(path):
+		return
         os.chdir(path)
 	for root, dirs, files in os.walk('.'):
 		for file in files:
@@ -55,7 +57,7 @@ def sql(args, debug=True):
 		rows = cursor.execute(query)
 		print rows
 
-def grep(args):
+def search(args):
 	field = 'file'
 	pattern = '%'
 	if len(args) == 1:
@@ -164,13 +166,13 @@ def insert(args):
 	FILE.close()
 
 parser = OptionParser(usage="""
-disc <command> <command-args>
+media <command> <command-args>
 
-Creates SQL for the media library, or greps the media library for a term.
+Operations on the optical media library.
 
 Commands:
-  grep <term>       print any rows containing term
-  sql <discname>    output sql index of disc with discname
+  add <name>        adds the disc /Volumes/<name> to the library
+  search <term>     print any rows in the library containing term
   eject             eject disc
 """)
 (options,args) = parser.parse_args()
@@ -180,10 +182,10 @@ if len(args) < 1:
     exit(1)
 
 command = sys.argv[1]
-if command == 'grep':
-    grep(sys.argv[2:])
-elif command == 'sql':
-    sql(sys.argv[2:])
+if command == 'search':
+    search(sys.argv[2:])
+elif command == 'add':
+    add(sys.argv[2:])
 elif command == 'eject':
     eject(sys.argv[2:])
 else:

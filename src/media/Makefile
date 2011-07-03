@@ -1,4 +1,4 @@
 
 install:
-	install disc /opt/bin
+	install media /opt/bin
 
