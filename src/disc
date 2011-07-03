@@ -1,8 +1,8 @@
 #!/usr/bin/python
 import os, sys, time, re
 from stat import *
-#import MySQLdb as sql
 from optparse import OptionParser
+import pymysql
 
 MYSQLCMD = 'mysql -u rhaleblian -h mustard -D media'
 
@@ -16,12 +16,16 @@ def month(abbrev):
 	        return i+1
 	return None
 
-def sql(args):
-	(disc,) = args
+def connect():
+	return pymysql.connect(host='mustard',
+		user='rhaleblian',
+		db='media')
 
+def sql(args, debug=True):
+	(disc,) = args
+	query = ""
 	path = '/Volumes/%s' % disc
         os.chdir(path)
-	print 'use media;'
 	for root, dirs, files in os.walk('.'):
 		for file in files:
 			try:
@@ -40,7 +44,16 @@ def sql(args):
 			sql += "'" + "%d" % st.st_size + "',"
 			sql += "'%s'" % t
 			sql += ");"
-			print sql
+			#print sql
+			query += sql
+
+	if debug:
+		print query
+	else:
+		connection = connect()
+		cursor = connection.cursor()
+		rows = cursor.execute(query)
+		print rows
 
 def grep(args):
 	field = 'file'
@@ -53,9 +66,8 @@ def grep(args):
 		print 'grep field pattern'
 		return
 
-        cmd = """use media;
-select disc.label,file.dir,file.name from disc inner join file
-on disc.id = file.disc_id"""
+        cmd = """select disc.label,file.dir,file.name from disc 
+inner join file on disc.id = file.disc_id"""
         if field == 'dir':
             cmd += " where dir.name like "
         elif field == 'disc':
@@ -65,7 +77,15 @@ on disc.id = file.disc_id"""
         cmd += "'%%%s%%';" % pattern
 	print cmd
 
-	os.system('echo "%s" | %s' % (cmd,MYSQLCMD))
+	#os.system('echo "%s" | %s' % (cmd,MYSQLCMD))
+	connection = connect()
+	cursor = connection.cursor()
+	rows = cursor.execute(cmd)
+	if not rows:
+		return
+	rows = cursor.fetchall()
+	for row in rows:
+		print row
 
 '''
 def insert(args):
