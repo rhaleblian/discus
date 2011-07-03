@@ -1,0 +1,283 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXFileReference section */
+		15238F5013C0C21F009A99BD /* hello */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = hello; sourceTree = "<group>"; };
+		15238F5113C0C21F009A99BD /* hello.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = hello.c; sourceTree = "<group>"; };
+		15238F5213C0C21F009A99BD /* hello.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = hello.o; sourceTree = "<group>"; };
+		15238F5313C0C21F009A99BD /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		15238F5513C0C21F009A99BD /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		15238F5613C0C21F009A99BD /* media */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = media; sourceTree = "<group>"; };
+		15238F5713C0C21F009A99BD /* media.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = media.php; sourceTree = "<group>"; };
+		15238F5813C0C21F009A99BD /* media.spf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = media.spf; sourceTree = "<group>"; };
+		15238F5913C0C21F009A99BD /* media.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = media.sql; sourceTree = "<group>"; };
+		15238F5A13C0C21F009A99BD /* style.php */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.php; path = style.php; sourceTree = "<group>"; };
+		15238F5C13C0C22B009A99BD /* about_array_assignment.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_array_assignment.rb; sourceTree = "<group>"; };
+		15238F5D13C0C22B009A99BD /* about_arrays.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_arrays.rb; sourceTree = "<group>"; };
+		15238F5E13C0C22B009A99BD /* about_asserts.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_asserts.rb; sourceTree = "<group>"; };
+		15238F5F13C0C22B009A99BD /* about_blocks.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_blocks.rb; sourceTree = "<group>"; };
+		15238F6013C0C22B009A99BD /* about_class_methods.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_class_methods.rb; sourceTree = "<group>"; };
+		15238F6113C0C22B009A99BD /* about_classes.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_classes.rb; sourceTree = "<group>"; };
+		15238F6213C0C22B009A99BD /* about_constants.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_constants.rb; sourceTree = "<group>"; };
+		15238F6313C0C22B009A99BD /* about_control_statements.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_control_statements.rb; sourceTree = "<group>"; };
+		15238F6413C0C22B009A99BD /* about_dice_project.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_dice_project.rb; sourceTree = "<group>"; };
+		15238F6513C0C22B009A99BD /* about_exceptions.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_exceptions.rb; sourceTree = "<group>"; };
+		15238F6613C0C22B009A99BD /* about_extra_credit.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_extra_credit.rb; sourceTree = "<group>"; };
+		15238F6713C0C22B009A99BD /* about_hashes.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_hashes.rb; sourceTree = "<group>"; };
+		15238F6813C0C22B009A99BD /* about_inheritance.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_inheritance.rb; sourceTree = "<group>"; };
+		15238F6913C0C22B009A99BD /* about_iteration.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_iteration.rb; sourceTree = "<group>"; };
+		15238F6A13C0C22B009A99BD /* about_java_interop.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_java_interop.rb; sourceTree = "<group>"; };
+		15238F6B13C0C22B009A99BD /* about_message_passing.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_message_passing.rb; sourceTree = "<group>"; };
+		15238F6C13C0C22B009A99BD /* about_methods.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_methods.rb; sourceTree = "<group>"; };
+		15238F6D13C0C22B009A99BD /* about_modules.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_modules.rb; sourceTree = "<group>"; };
+		15238F6E13C0C22B009A99BD /* about_nil.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_nil.rb; sourceTree = "<group>"; };
+		15238F6F13C0C22B009A99BD /* about_objects.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_objects.rb; sourceTree = "<group>"; };
+		15238F7013C0C22B009A99BD /* about_open_classes.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_open_classes.rb; sourceTree = "<group>"; };
+		15238F7113C0C22B009A99BD /* about_proxy_object_project.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_proxy_object_project.rb; sourceTree = "<group>"; };
+		15238F7213C0C22B009A99BD /* about_regular_expressions.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_regular_expressions.rb; sourceTree = "<group>"; };
+		15238F7313C0C22B009A99BD /* about_sandwich_code.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_sandwich_code.rb; sourceTree = "<group>"; };
+		15238F7413C0C22B009A99BD /* about_scope.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_scope.rb; sourceTree = "<group>"; };
+		15238F7513C0C22B009A99BD /* about_scoring_project.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_scoring_project.rb; sourceTree = "<group>"; };
+		15238F7613C0C22B009A99BD /* about_strings.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_strings.rb; sourceTree = "<group>"; };
+		15238F7713C0C22B009A99BD /* about_symbols.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_symbols.rb; sourceTree = "<group>"; };
+		15238F7813C0C22B009A99BD /* about_to_str.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_to_str.rb; sourceTree = "<group>"; };
+		15238F7913C0C22B009A99BD /* about_triangle_project.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_triangle_project.rb; sourceTree = "<group>"; };
+		15238F7A13C0C22B009A99BD /* about_triangle_project_2.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_triangle_project_2.rb; sourceTree = "<group>"; };
+		15238F7B13C0C22B009A99BD /* about_true_and_false.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = about_true_and_false.rb; sourceTree = "<group>"; };
+		15238F7C13C0C22B009A99BD /* array_test.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = array_test.rb; sourceTree = "<group>"; };
+		15238F7D13C0C22B009A99BD /* code_mash.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = code_mash.rb; sourceTree = "<group>"; };
+		15238F7E13C0C22B009A99BD /* edgecase.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = edgecase.rb; sourceTree = "<group>"; };
+		15238F7F13C0C22B009A99BD /* example_file.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = example_file.txt; sourceTree = "<group>"; };
+		15238F8013C0C22B009A99BD /* first_test.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = first_test.rb; sourceTree = "<group>"; };
+		15238F8113C0C22B009A99BD /* GREED_RULES.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GREED_RULES.txt; sourceTree = "<group>"; };
+		15238F8213C0C22B009A99BD /* path_to_enlightenment.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = path_to_enlightenment.rb; sourceTree = "<group>"; };
+		15238F8313C0C22B009A99BD /* Rakefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Rakefile; sourceTree = "<group>"; };
+		15238F8413C0C22B009A99BD /* README.rdoc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.rdoc; sourceTree = "<group>"; };
+		15238F8513C0C22B009A99BD /* test_helper.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = test_helper.rb; sourceTree = "<group>"; };
+		15238F8613C0C22B009A99BD /* triangle.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = triangle.rb; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		15238F4E13C0C21F009A99BD /* src */ = {
+			isa = PBXGroup;
+			children = (
+				15238F4F13C0C21F009A99BD /* hello */,
+				15238F5413C0C21F009A99BD /* media */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		15238F4F13C0C21F009A99BD /* hello */ = {
+			isa = PBXGroup;
+			children = (
+				15238F5013C0C21F009A99BD /* hello */,
+				15238F5113C0C21F009A99BD /* hello.c */,
+				15238F5213C0C21F009A99BD /* hello.o */,
+				15238F5313C0C21F009A99BD /* Makefile */,
+			);
+			path = hello;
+			sourceTree = "<group>";
+		};
+		15238F5413C0C21F009A99BD /* media */ = {
+			isa = PBXGroup;
+			children = (
+				15238F5513C0C21F009A99BD /* Makefile */,
+				15238F5613C0C21F009A99BD /* media */,
+				15238F5713C0C21F009A99BD /* media.php */,
+				15238F5813C0C21F009A99BD /* media.spf */,
+				15238F5913C0C21F009A99BD /* media.sql */,
+				15238F5A13C0C21F009A99BD /* style.php */,
+			);
+			path = media;
+			sourceTree = "<group>";
+		};
+		15238F5B13C0C22B009A99BD /* koans */ = {
+			isa = PBXGroup;
+			children = (
+				15238F5C13C0C22B009A99BD /* about_array_assignment.rb */,
+				15238F5D13C0C22B009A99BD /* about_arrays.rb */,
+				15238F5E13C0C22B009A99BD /* about_asserts.rb */,
+				15238F5F13C0C22B009A99BD /* about_blocks.rb */,
+				15238F6013C0C22B009A99BD /* about_class_methods.rb */,
+				15238F6113C0C22B009A99BD /* about_classes.rb */,
+				15238F6213C0C22B009A99BD /* about_constants.rb */,
+				15238F6313C0C22B009A99BD /* about_control_statements.rb */,
+				15238F6413C0C22B009A99BD /* about_dice_project.rb */,
+				15238F6513C0C22B009A99BD /* about_exceptions.rb */,
+				15238F6613C0C22B009A99BD /* about_extra_credit.rb */,
+				15238F6713C0C22B009A99BD /* about_hashes.rb */,
+				15238F6813C0C22B009A99BD /* about_inheritance.rb */,
+				15238F6913C0C22B009A99BD /* about_iteration.rb */,
+				15238F6A13C0C22B009A99BD /* about_java_interop.rb */,
+				15238F6B13C0C22B009A99BD /* about_message_passing.rb */,
+				15238F6C13C0C22B009A99BD /* about_methods.rb */,
+				15238F6D13C0C22B009A99BD /* about_modules.rb */,
+				15238F6E13C0C22B009A99BD /* about_nil.rb */,
+				15238F6F13C0C22B009A99BD /* about_objects.rb */,
+				15238F7013C0C22B009A99BD /* about_open_classes.rb */,
+				15238F7113C0C22B009A99BD /* about_proxy_object_project.rb */,
+				15238F7213C0C22B009A99BD /* about_regular_expressions.rb */,
+				15238F7313C0C22B009A99BD /* about_sandwich_code.rb */,
+				15238F7413C0C22B009A99BD /* about_scope.rb */,
+				15238F7513C0C22B009A99BD /* about_scoring_project.rb */,
+				15238F7613C0C22B009A99BD /* about_strings.rb */,
+				15238F7713C0C22B009A99BD /* about_symbols.rb */,
+				15238F7813C0C22B009A99BD /* about_to_str.rb */,
+				15238F7913C0C22B009A99BD /* about_triangle_project.rb */,
+				15238F7A13C0C22B009A99BD /* about_triangle_project_2.rb */,
+				15238F7B13C0C22B009A99BD /* about_true_and_false.rb */,
+				15238F7C13C0C22B009A99BD /* array_test.rb */,
+				15238F7D13C0C22B009A99BD /* code_mash.rb */,
+				15238F7E13C0C22B009A99BD /* edgecase.rb */,
+				15238F7F13C0C22B009A99BD /* example_file.txt */,
+				15238F8013C0C22B009A99BD /* first_test.rb */,
+				15238F8113C0C22B009A99BD /* GREED_RULES.txt */,
+				15238F8213C0C22B009A99BD /* path_to_enlightenment.rb */,
+				15238F8313C0C22B009A99BD /* Rakefile */,
+				15238F8413C0C22B009A99BD /* README.rdoc */,
+				15238F8513C0C22B009A99BD /* test_helper.rb */,
+				15238F8613C0C22B009A99BD /* triangle.rb */,
+			);
+			path = koans;
+			sourceTree = "<group>";
+		};
+		157181BA13C026850076BEAB = {
+			isa = PBXGroup;
+			children = (
+				15238F5B13C0C22B009A99BD /* koans */,
+				15238F4E13C0C21F009A99BD /* src */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXLegacyTarget section */
+		157181C113C026860076BEAB /* twiddlets */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "$(ACTION)";
+			buildConfigurationList = 157181C413C026860076BEAB /* Build configuration list for PBXLegacyTarget "twiddlets" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			dependencies = (
+			);
+			name = twiddlets;
+			passBuildSettingsInEnvironment = 1;
+			productName = twiddlets;
+		};
+/* End PBXLegacyTarget section */
+
+/* Begin PBXProject section */
+		157181BC13C026850076BEAB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				ORGANIZATIONNAME = "Walt Disney Animation Studio";
+			};
+			buildConfigurationList = 157181BF13C026850076BEAB /* Build configuration list for PBXProject "twiddlets" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 157181BA13C026850076BEAB;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				157181C113C026860076BEAB /* twiddlets */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		157181C213C026860076BEAB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		157181C313C026860076BEAB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		157181C513C026860076BEAB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DEBUGGING_SYMBOLS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		157181C613C026860076BEAB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		157181BF13C026850076BEAB /* Build configuration list for PBXProject "twiddlets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				157181C213C026860076BEAB /* Debug */,
+				157181C313C026860076BEAB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		157181C413C026860076BEAB /* Build configuration list for PBXLegacyTarget "twiddlets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				157181C513C026860076BEAB /* Debug */,
+				157181C613C026860076BEAB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 157181BC13C026850076BEAB /* Project object */;
+}
