@@ -7,12 +7,14 @@
 
 $disc = $_GET['disc'];
 
-$conn = mysql_connect("localhost", "root", "23masons");
+$conn = mysql_connect("localhost", "rhaleblian");
 $result = mysql_select_db("media");
 
 if ($disc == "") {
-	//	$sql = "select disc from file group by disc";
-	$sql = "select label from disc";
+    
+    # Available discs.
+    
+	$sql = "select label, status from disc order by label";
 	$result = mysql_query($sql);
 	$rows = array();
 	while ($row = mysql_fetch_assoc($result)) {
@@ -24,10 +26,12 @@ if ($disc == "") {
 
 	$i=0;
 	for (; $i<count($rows)/3; $i++) {
-		$row = $rows[$i];	
+		$row = $rows[$i];
+        if ($row['status'] > 0) echo "<s>"; 
 		echo "<a href=\"?disc=", $row['label'], "\">";
-		echo $row['label'],"<br/>\n";
+		echo $row['label'], "<br/>\n";
 		echo "</a>\n";
+        if ($row['status'] > 0) echo "</s>"; 
 	}
 
 	echo "</td><td>\n";
@@ -51,10 +55,16 @@ if ($disc == "") {
 	echo "</td></tr></table>\n";
 
 } else {
-	//	$sql = "select * from file where disc like '" . $disc . "'";
-	$sql = "select file.* from disc inner join file on disc.id=file.disc_id where disc.label like '" . $disc . "'";
+    
+    # Disc contents.
+	
+    $sql  = "select file.* from disc ";
+    $sql .= "inner join file on disc.id=file.disc_id ";
+    $sql .= "where disc.label like '" . $disc . "'";
 	$result = mysql_query($sql);
-	echo '<table cellpadding="4"><tr><td>Disc</td><td>Folder</td><td>File</td></tr>';
+    echo '<h3>',$disc,'</h3>';
+	echo '<table cellpadding="4">';
+    echo '<tr><td>Folder</td><td>File</td></tr>';
 	$lastdir = "";
 	while ($row = mysql_fetch_assoc($result)) {
 		echo "<tr>";

@@ -25,7 +25,7 @@ def connect():
 
 def add(args, debug=True):
     """ Add disc contents to index. """
-	(disc,) = args
+    (disc,) = args
 
     # Allow passing the disc name
     # or a path to the mountpoint.
@@ -47,7 +47,7 @@ values ('%s', NULL, 0);""" % escape(disc)
 
     walkroot = path
     sql = ""
-	for root, dirs, files in os.walk(walkroot):
+    for root, dirs, files in os.walk(walkroot):
         for file in files:
             try:
                 st = os.stat(root + "/" + file)
@@ -69,34 +69,73 @@ values ('%s', NULL, 0);""" % escape(disc)
 
 def search(args):
     """ Return rows in index containing pattern. """
-	field = 'file'
-	pattern = '%'
-	if len(args) == 1:
-		(pattern,) = args
-	elif len(args) == 2:
-		(field, pattern) = args
-	else:
-		return
+    field = 'file'
+    pattern = '%'
+    if len(args) == 1:
+        (pattern,) = args
+    elif len(args) == 2:
+        (field, pattern) = args
+    else:
+        return
 
-        cmd  = """select disc.label,file.dir,file.name from disc
+    cmd  = """select disc.label,file.dir,file.name from disc
         inner join file on disc.id = file.disc_id where """
-        if field == 'dir':
-            cmd += "dir.name"
-        elif field == 'disc':
-            cmd += "disc.label"
-        else:
-            cmd += "file.name"
+    if field == 'dir':
+        cmd += "dir.name"
+    elif field == 'disc':
+        cmd += "disc.label"
+    else:
+        cmd += "file.name"
         cmd += " like '%%%s%%';" % pattern
 	print cmd
 
-	connection = connect()
-	cursor = connection.cursor()
-	rows = cursor.execute(cmd)
-	if not rows:
-		return
-	rows = cursor.fetchall()
-	for row in rows:
-		print row
+    connection = connect()
+    cursor = connection.cursor()
+    rows = cursor.execute(cmd)
+    if not rows:
+        return
+    rows = cursor.fetchall()
+    for row in rows:
+        print row
+
+def upgrade(args):
+    (disc_id) = args
+    connection = connect()
+    cursor = connection.cursor()
+
+    rows = cursor.execute("""
+select label,name from disc where id = %s""", (disc_id))
+    if not rows:
+        return
+    rows = cursor.fetchone()
+    disclabel, discname = rows
+    if not discname:
+        discname = disclabel
+
+    rows = cursor.execute("""
+select id,disc_id,dir,name from file
+where disc_id = %s;""", (disc_id))
+    if not rows:
+        return
+    rows = cursor.fetchall()
+    for row in rows:
+        idd, disc_idd, d, n = row
+        if not d:
+            continue
+        dnew = d
+        if re.match('^\.', d):
+            dnew = '/'
+        elif re.match('^\./', d):
+            dnew = re.sub('^\./', '/', d)
+        elif re.match('^/Volumes/%s' % discname, d):
+            dnew = re.sub('^/Volumes/%s' % discname, '', d)
+        dnew = re.sub("^'", "", dnew)
+        dnew = re.sub("'$", "", dnew)
+        print idd, disc_idd, dnew, n
+        if dnew != d:
+            cursor.execute("""
+update file set dir = %s where id = %s;""", (dnew, idd))
+
 
 parser = OptionParser(usage="""
 media <command> <command-args>
@@ -104,7 +143,7 @@ media <command> <command-args>
 Operations on the optical media library.
 
 Commands:
-  add <name>        adds the disc /Volumes/<name> to the library
+  add <name>        add disc /Volumes/<name> to the library
   search <term>     print any rows in the library containing term
   eject             eject disc
 """)
@@ -121,5 +160,7 @@ elif command == 'add':
     add(sys.argv[2:])
 elif command == 'eject':
     eject(sys.argv[2:])
+elif command == 'upgrade':
+    upgrade(sys.argv[2:])
 else:
     print 'unsupported command %s' % command
