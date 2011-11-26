@@ -3,7 +3,7 @@
     Operations on media library index.
     Shell script.
 """
-import os, sys, time, re
+import os, sys, time, re, platform
 from stat import *
 from optparse import OptionParser
 import pymysql
@@ -29,12 +29,19 @@ def add(args, debug=True):
 
     # Allow passing the disc name
     # or a path to the mountpoint.
+    # Not applicable under Cygwin.
 
-    path = '/Volumes/%s/' % disc
-    m = re.match('/Volumes/(\w+)/?', disc)
-    if m:
-        path = os.path.join(disc) + "/"
-        disc = m.group(1)
+    if re.match('CYGWIN.+', platform.system()):
+        mountpoint = '/cygdrive/d'
+        path = mountpoint
+    else:
+        mountpoint = '/Volumes'
+        path = os.path.join(mountpoint, disc)
+        m = re.match('%s/?' % path, disc)
+        if m:
+            path = os.path.join(disc) + "/"
+            disc = m.group(1)
+
     if not os.path.exists(path):
         return
 
