@@ -1,5 +1,14 @@
+PREFIX=/usr/local
+WEBROOT=//mustard/www/media
+#WEBROOT=/Volumes/www
+
+include Makefile.$(shell uname)
+
+default:
+	@echo "rules: install"
 
 install:
-	install media /opt/bin
-	install media.php /Volumes/www
-	install style.php /Volumes/www
+	install media $(PREFIX)/bin
+	install index.php $(WEBROOT)
+	install style.php $(WEBROOT)
+
