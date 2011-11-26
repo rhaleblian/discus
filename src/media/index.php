@@ -46,7 +46,7 @@ if ($disc == "") {
 	}
 
 	echo '<table cellpadding="16">';
-	echo "<tr><td>\n";
+	echo '<tr cellpadding="16"><td>',"\n";
 
 	# Three columns.
 	
