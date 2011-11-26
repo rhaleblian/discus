@@ -7,5 +7,4 @@ default:
 install:
 	install media $(PREFIX)/bin
 	install index.php $(WEBROOT)
-	install style.php $(WEBROOT)
 
