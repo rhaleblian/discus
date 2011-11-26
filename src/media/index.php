@@ -45,8 +45,8 @@ if ($disc == "") {
 		$rows[] = $row;
 	}
 
-	echo '<table cellpadding="16">';
-	echo '<tr cellpadding="16"><td>',"\n";
+	echo '<table border="1" cellpadding="4" cellspacing="4">';
+	echo '<tr><td>',"\n";
 
 	# Three columns.
 	
