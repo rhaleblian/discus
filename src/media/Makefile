@@ -1,7 +1,4 @@
 PREFIX=/usr/local
-WEBROOT=//mustard/www/media
-#WEBROOT=/Volumes/www
-
 include Makefile.$(shell uname)
 
 default:
