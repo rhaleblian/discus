@@ -19,7 +19,7 @@ def month(abbrev):
     return None
     
 def connect():
-    return pymysql.connect(host='mustard',
+    return pymysql.connect(host='192.168.1.73',
                            user='rhaleblian',
                            db='media')
 
