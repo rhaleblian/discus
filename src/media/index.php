@@ -22,14 +22,14 @@ $extant = $_GET['extant'];
 if ($extant == "") {
 	$extant = 1;
 }
-$conn = mysql_connect("localhost", "rhaleblian");
+$conn = mysql_connect("localhost", "user");
 $result = mysql_select_db("media");
 		
 if ($disc == "") {
     
     # Available discs.
 ?>
-	<title>Data Media Library</title>
+	<title>Media Catalog</title>
   </head>
 <body>
   <h2>Catalog</h2>
@@ -73,7 +73,7 @@ if ($disc == "") {
     
     # Disc contents.
 ?>
-	<title>Data Media Library - <?php echo($disc) ?></title>
+	<title>Media Catalog - <?php echo($disc) ?></title>
   </head>
   <body>
     <h3><?php echo($disc); ?></h3>

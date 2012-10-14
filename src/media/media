@@ -11,7 +11,7 @@ import pymysql
 def escape(expr):
     return re.sub('\'','\\\'',expr)
 
-def month(abbrev):
+def month_as_integer(abbrev):
     ab = ('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec')
     for i in range(0,11):
         if ab[i] == abbrev:
@@ -19,8 +19,9 @@ def month(abbrev):
     return None
     
 def connect():
-    return pymysql.connect(host='192.168.1.73',
-                           user='rhaleblian',
+    return pymysql.connect(host='localhost',
+                           user='username',
+                           passwd='passwd',
                            db='media')
 
 def add(args, debug=True):
@@ -33,6 +34,9 @@ def add(args, debug=True):
 
     if re.match('CYGWIN.+', platform.system()):
         mountpoint = '/cygdrive/d'
+        path = mountpoint
+    elif platform.system() == 'Windows':
+        mountpoint = 'c:\'
         path = mountpoint
     else:
         mountpoint = '/Volumes'
