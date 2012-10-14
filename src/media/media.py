@@ -35,7 +35,7 @@ def add(args, debug=True):
         mountpoint = '/cygdrive/d'
         path = mountpoint
     elif platform.system() == 'Windows':
-        mountpoint = 'c:/'
+        mountpoint = 'd:/'
         path = mountpoint
     else:
         mountpoint = '/Volumes'

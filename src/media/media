@@ -30,7 +30,5 @@ elif command == 'add':
     media.add(sys.argv[2:])
 elif command == 'eject':
     media.eject(sys.argv[2:])
-elif command == 'upgrade':
-    media.upgrade(sys.argv[2:])
 else:
     print 'Error, unsupported command "%s"' % command
