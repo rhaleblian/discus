@@ -32,7 +32,6 @@ if ($disc == "") {
 	<title>Media Catalog</title>
   </head>
 <body>
-  <h2>Catalog</h2>
 <?php
 	$sql = "select label, status from disc";
 	if ($extant == 1) {
