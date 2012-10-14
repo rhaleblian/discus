@@ -36,7 +36,7 @@ def add(args, debug=True):
         mountpoint = '/cygdrive/d'
         path = mountpoint
     elif platform.system() == 'Windows':
-        mountpoint = 'c:\'
+        mountpoint = 'c:/'
         path = mountpoint
     else:
         mountpoint = '/Volumes'
@@ -154,7 +154,7 @@ media <command> <command-args>
 Operations on the optical media library.
 
 Commands:
-  add <name>        add disc /Volumes/<name> to the library
+  add <name>        add disc in drive to the library, as <name>
   search <term>     print any rows in the library containing term
   eject             eject disc
 """)
@@ -174,4 +174,4 @@ elif command == 'eject':
 elif command == 'upgrade':
     upgrade(sys.argv[2:])
 else:
-    print 'unsupported command %s' % command
+    print 'Error, unsupported command "%s"' % command
