@@ -26,7 +26,6 @@ def connect():
 def add(args, debug=True):
     """ Add disc contents to index. """
     (disc,) = args
-
     if re.match('CYGWIN.+', platform.system()):
         mountpoint = '/cygdrive/d'
         path = mountpoint
@@ -38,6 +37,9 @@ def add(args, debug=True):
         # or a path to the mountpoint.
         path = '/Volumes'
         if not re.match('/', disc):
+            # Automator passes a disc name as an
+            # classic-style Volume designator.
+            disc = re.sub(':$', '', disc)
             path = os.path.join(path, disc)
         else:
             path = disc
