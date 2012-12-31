@@ -18,18 +18,14 @@ def month_as_integer(abbrev):
     return None
     
 def connect():
-    return pymysql.connect(host='localhost',
-                           user='username',
-                           passwd='passwd',
-                           db='media')
+    return pymysql.connect(host='haleblian.com',
+                           user='haleblia_media',
+                           passwd='UrCn8%bDu~0?',
+                           db='haleblia_media')
 
 def add(args, debug=True):
     """ Add disc contents to index. """
     (disc,) = args
-
-    # Allow passing the disc name
-    # or a path to the mountpoint.
-    # Not applicable under Cygwin.
 
     if re.match('CYGWIN.+', platform.system()):
         mountpoint = '/cygdrive/d'
@@ -38,12 +34,14 @@ def add(args, debug=True):
         mountpoint = 'd:/'
         path = mountpoint
     else:
-        mountpoint = '/Volumes'
-        path = os.path.join(mountpoint, disc)
-        m = re.match('%s/?' % path, disc)
-        if m:
-            path = os.path.join(disc) + "/"
-            disc = m.group(1)
+        # Allow passing the disc name
+        # or a path to the mountpoint.
+        path = '/Volumes'
+        if not re.match('/', disc):
+            path = os.path.join(path, disc)
+        else:
+            path = disc
+            disc = os.path.split(path)[1]
 
     if not os.path.exists(path):
         return
