@@ -18,7 +18,8 @@ def month_as_integer(abbrev):
     return None
     
 def connect():
-    conf = json.load(open('config.json'))
+    confpath = os.path.join(os.getenv('HOME'), '.config', 'media.json')
+    conf = json.load(open(confpath))
     return pymysql.connect(**conf)
 
 def add(args, debug=True):
