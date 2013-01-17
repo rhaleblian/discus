@@ -3,7 +3,7 @@
     Operations on media library index.
     Shell script.
 """
-import os, sys, time, re, platform
+import json, os, sys, time, re, platform
 from stat import *
 import pymysql
 
@@ -18,10 +18,8 @@ def month_as_integer(abbrev):
     return None
     
 def connect():
-    return pymysql.connect(host='haleblian.com',
-                           user='haleblia_media',
-                           passwd='UrCn8%bDu~0?',
-                           db='haleblia_media')
+    conf = json.load(open('config.json'))
+    return pymysql.connect(**conf)
 
 def add(args, debug=True):
     """ Add disc contents to index. """

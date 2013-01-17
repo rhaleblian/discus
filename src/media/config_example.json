@@ -1,0 +1,6 @@
+{
+  "host": "localhost",
+  "user": "media",
+  "passwd": "pass",
+  "db"  : "media"
+}
