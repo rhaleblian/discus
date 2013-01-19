@@ -21,12 +21,11 @@ def month_as_integer(abbrev):
 def connect():
     confpath = os.path.join(os.getenv('HOME'), '.config', 'media.json')
     conf = json.load(open(confpath))
-    return pymysql.connect(**conf)
+    return pymysql.connect(conf['host'], conf['user'], conf['passwd'], conf['db'])
 
 def add(args, label=None, debug=True):
     """ Add disc contents to index. """
     (_unused, disc) = args
-    if not label: label = ''
     disc = re.sub('/$', '', disc)
     if re.match('CYGWIN.+', platform.system()):
         mountpoint = '/cygdrive/d'
@@ -55,8 +54,12 @@ def add(args, label=None, debug=True):
 
     connection = connect()
     cursor = connection.cursor()
+    if label and len(label):
+        labelexpr = "'%s'" % escape(label)
+    else:
+        labelexpr = 'NULL'
     sql = """insert into disc (name, label, format, status)
-values ('%s', '%s', NULL, 0);""" % (escape(disc), escape(label))
+values ('%s', %s, NULL, 0);""" % (escape(disc), labelexpr)
     rows = cursor.execute(sql)
     iid = cursor.lastrowid
 
