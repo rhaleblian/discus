@@ -1,6 +1,6 @@
 #!/usr/bin/python
 """
-    Operations on media library index.
+    Operations on optical media catalog.
     Shell script.
 """
 import json, os, sys, time, re, platform
@@ -11,7 +11,8 @@ def escape(expr):
     return re.sub('\'','\\\'',expr)
 
 def month_as_integer(abbrev):
-    ab = ('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec')
+    ab = ('Jan','Feb','Mar','Apr','May','Jun',
+          'Jul','Aug','Sep','Oct','Nov','Dec')
     for i in range(0,11):
         if ab[i] == abbrev:
             return i+1
@@ -25,6 +26,7 @@ def connect():
 def add(args, label=None, debug=True):
     """ Add disc contents to index. """
     (_unused, disc) = args
+    if not label: label = ''
     disc = re.sub('/$', '', disc)
     if re.match('CYGWIN.+', platform.system()):
         mountpoint = '/cygdrive/d'
@@ -53,8 +55,8 @@ def add(args, label=None, debug=True):
 
     connection = connect()
     cursor = connection.cursor()
-    sql = """insert into disc (label, format, status)
-values ('%s', NULL, 0);""" % escape(disc)
+    sql = """insert into disc (name, label, format, status)
+values ('%s', '%s', NULL, 0);""" % (escape(disc), escape(label))
     rows = cursor.execute(sql)
     iid = cursor.lastrowid
 
