@@ -11,10 +11,11 @@ function echorow($row) {
 	# print a row from the disc table.
 	
 	if ($row['status'] > 0) echo "<s>"; 
-		echo "<a href=\"?disc=", $row['label'], "\">";
-		echo $row['label'], "</a>";
-		if ($row['status'] > 0) echo "</s>";
-		echo "</br>\n";
+	echo "<a href=\"?disc=", $row['label'], "\">";
+	if (strlen($row['name'])) echo $row['name'], " [", $row['label'], "]</a>";		
+	else echo $row['label'], "</a>";
+	if ($row['status'] > 0) echo "</s>";
+	echo "</br>\n";
 }
 
 $disc = $_GET['disc'];
@@ -38,7 +39,7 @@ if ($disc == "") {
   </head>
 <body>
 <?php
-	$sql = "select label, status from disc";
+	$sql = "select label, name, status from disc";
 	if ($extant == 1) {
 	   $sql .= " where status = 0";
 	}
@@ -49,40 +50,31 @@ if ($disc == "") {
 		$rows[] = $row;
 	}
 
-	echo '<table border="1" cellpadding="4" cellspacing="4">';
-	echo '<tr><td>',"\n";
+	echo '<table border="1" cellpadding="8" cellspacing="8">';
+	echo '<tr>',"\n";
 
-	# Three columns.
-	
+	$columns=1;
 	$i=0;
-	for (; $i<count($rows)*.33; $i++) {
-		echorow($rows[$i]);
+	for ($column=1; $column<=$columns; $column++) {
+		echo "<td>\n";
+		for (; $i<count($rows)*($column/$columns); $i++) {
+			echorow($rows[$i]);
+		}
+		echo "</td>\n";
 	}
 
-	echo "</td><td>\n";
-
-	for (; $i<count($rows)*.66; $i++) {
-		echorow($rows[$i]);
-	}
-
-	echo "</td><td>\n";
-
-	for (; $i<count($rows); $i++) {
-		echorow($rows[$i]);
-	}
-
-	echo "</td></tr></table>\n";
+	echo "</tr></table>\n";
 
 } else {
     
     # Disc contents.
 ?>
-	<title>Optical Media Catalog for "<?php echo($disc) ?>"</title>
+    <title>Optical Media Catalog for "<?php echo($disc); ?>"</title>
   </head>
   <body>
     <h3><?php echo($disc); ?></h3>
-	<table cellpadding="4">
-    <tr><td>Folder</td><td>File</td></tr>
+       <table cellpadding="8">
+         <tr><td>Folder</td><td>File</td></tr>
 <?php	
     $sql  = "select file.* from disc ";
     $sql .= "inner join file on disc.id=file.disc_id ";
