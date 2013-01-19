@@ -9,19 +9,25 @@
 
 function echorow($row) {
 	# print a row from the disc table.
-	
-	if ($row['status'] > 0) echo "<s>"; 
-	echo "<a href=\"?disc=", $row['label'], "\">";
-	if (strlen($row['name'])) echo $row['name'], " [", $row['label'], "]</a>";		
-	else echo $row['label'], "</a>";
-	if ($row['status'] > 0) echo "</s>";
+	$name = $row['name'];
+	$label = $row['label'];
+	$status = $row['status'];
+	if ($status > 0) echo "<s>"; 
+	echo "<a href=\"?disc=", $label, "\">";
+	if (strlen($name) && strlen(label)) 
+		echo $label, " [", $name, "]</a>";
+	else if (strlen($name))
+		echo $name, "</a>";
+	else
+		echo $label, "</a>";
+	if ($status > 0) echo "</s>";
 	echo "</br>\n";
 }
 
 $disc = $_GET['disc'];
 $extant = $_GET['extant'];
 if ($extant == "") {
-	$extant = 1;
+	$extant = 0;
 }
 
 $ini_path = "../../../.config/media.ini";
@@ -69,7 +75,7 @@ if ($disc == "") {
     
     # Disc contents.
 ?>
-    <title>Optical Media Catalog for "<?php echo($disc); ?>"</title>
+    <title><?php echo($disc); ?></title>
   </head>
   <body>
     <h3><?php echo($disc); ?></h3>
