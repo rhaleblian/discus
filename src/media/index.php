@@ -22,14 +22,19 @@ $extant = $_GET['extant'];
 if ($extant == "") {
 	$extant = 1;
 }
-$conn = mysql_connect("localhost", "user");
-$result = mysql_select_db("media");
-		
+
+$ini_path = "../../../.config/media.ini";
+$ini_array = parse_ini_file($ini_path);
+$conn = mysql_connect($ini_array["host"],
+                      $ini_array["user"],
+                      $ini_array["passwd"]);
+$result = mysql_select_db($ini_array["db"]);
+
 if ($disc == "") {
     
     # Available discs.
 ?>
-	<title>Media Catalog</title>
+	<title>Optical Media Catalog</title>
   </head>
 <body>
 <?php
@@ -72,7 +77,7 @@ if ($disc == "") {
     
     # Disc contents.
 ?>
-	<title>Media Catalog - <?php echo($disc) ?></title>
+	<title>Optical Media Catalog for "<?php echo($disc) ?>"</title>
   </head>
   <body>
     <h3><?php echo($disc); ?></h3>

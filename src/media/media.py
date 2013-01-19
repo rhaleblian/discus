@@ -22,16 +22,17 @@ def connect():
     conf = json.load(open(confpath))
     return pymysql.connect(**conf)
 
-def add(args, debug=True):
+def add(args, label=None, debug=True):
     """ Add disc contents to index. """
-    (disc,) = args
+    (_unused, disc) = args
+    disc = re.sub('/$', '', disc)
     if re.match('CYGWIN.+', platform.system()):
         mountpoint = '/cygdrive/d'
         path = mountpoint
     elif platform.system() == 'Windows':
         mountpoint = 'd:/'
         path = mountpoint
-    else:
+    elif platform.system() == 'Darwin':
         # Allow passing the disc name
         # or a path to the mountpoint.
         path = '/Volumes'
@@ -43,7 +44,10 @@ def add(args, debug=True):
         else:
             path = disc
             disc = os.path.split(path)[1]
-
+    else:
+        path = disc
+        disc = os.path.split(path)[1]
+  
     if not os.path.exists(path):
         return
 

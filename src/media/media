@@ -17,17 +17,23 @@ Commands:
   search <term>     print any rows in the library containing term
   eject             eject disc
 """)
+parser.add_option('--label')
 (options,args) = parser.parse_args()
 
 if len(args) < 1:
     parser.print_help()
     exit(1)
 
+print args
+
+label = None
+if options.label:
+    label = options.label
 command = sys.argv[1]
 if command == 'search':
     media.search(sys.argv[2:])
 elif command == 'add':
-    media.add(sys.argv[2:])
+    media.add(args, label)
 elif command == 'eject':
     media.eject(sys.argv[2:])
 else:

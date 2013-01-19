@@ -1,2 +1,4 @@
 Optical media cataloging system.
-Create '$HOME/.config/media.json' based on 'media.json'.
+
+On clients, create '$HOME/.config/media.json' based on 'media.json'.
+On the server, create '$HOME/.config/media.ini' based on 'media.ini'.
