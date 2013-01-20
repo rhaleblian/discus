@@ -9,11 +9,12 @@
 
 function echorow($row) {
 	# print a row from the disc table.
+	$id = $row['id'];
 	$name = $row['name'];
 	$label = $row['label'];
 	$status = $row['status'];
 	if ($status > 0) echo "<s>"; 
-	echo "<a href=\"?disc_id=", $label, "\">";
+	echo "<a href=\"?disc_id=", $id, "\">";
 	if (strlen($name) && strlen(label)) 
 		echo $label, " [", $name, "]</a>";
 	else if (strlen($name))
