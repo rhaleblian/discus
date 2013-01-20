@@ -13,7 +13,7 @@ function echorow($row) {
 	$label = $row['label'];
 	$status = $row['status'];
 	if ($status > 0) echo "<s>"; 
-	echo "<a href=\"?disc=", $label, "\">";
+	echo "<a href=\"?disc_id=", $label, "\">";
 	if (strlen($name) && strlen(label)) 
 		echo $label, " [", $name, "]</a>";
 	else if (strlen($name))
@@ -24,7 +24,7 @@ function echorow($row) {
 	echo "</br>\n";
 }
 
-$disc = $_GET['disc'];
+$disc_id = $_GET['disc_id'];
 $extant = $_GET['extant'];
 if ($extant == "") {
 	$extant = 0;
@@ -37,15 +37,15 @@ $conn = mysql_connect($ini_array["host"],
                       $ini_array["passwd"]);
 $result = mysql_select_db($ini_array["db"]);
 
-if ($disc == "") {
+if ($disc_id == "") {
     
     # Available discs.
 ?>
-	<title>Optical Media Catalog</title>
+    <title>Optical Media Catalog</title>
   </head>
 <body>
 <?php
-	$sql = "select label, name, status from disc";
+	$sql = "select id, label, name, status from disc";
 	if ($extant == 1) {
 	   $sql .= " where status = 0";
 	}
@@ -73,32 +73,32 @@ if ($disc == "") {
 
 } else {
     
-    # Disc contents.
-?>
-    <title><?php echo($disc); ?></title>
-  </head>
-  <body>
-    <h3><?php echo($disc); ?></h3>
-       <table cellpadding="8">
-         <tr><td>Folder</td><td>File</td></tr>
-<?php	
-    $sql  = "select file.* from disc ";
-    $sql .= "inner join file on disc.id=file.disc_id ";
-    $sql .= "where disc.label like '" . $disc . "'";
+	# Disc contents.
+
+	$sql  = "select file.* from disc ";
+	$sql .= "inner join file on disc.id=file.disc_id ";
+	$sql .= "where disc.id = '" . $disc_id . "'";
 	$result = mysql_query($sql);
 	$lastdir = "";
+?>
+    <title>Optical Media Catalog</title>
+  </head>
+  <body>
+    <table cellpadding="8">
+      <tr><td>Folder</td><td>File</td></tr>
+<?php	
 	while ($row = mysql_fetch_assoc($result)) {
-		echo "<tr>";
+		echo "      <tr>";
 		if ($lastdir != $row['dir']) {
-			echo "<td>",$row['dir'],"</td>";
+			echo "        <td>",$row['dir'],"</td>";
 		} else {
-			echo "<td></td>";
+			echo "        <td></td>";
 		}
-		echo "<td>",$row['name'],"</td>";
-		echo "</tr>";
+		echo "        <td>",$row['name'],"</td>";
+		echo "      </tr>";
 		$lastdir = $row['dir'];
 	}
-	echo "</table>";
+	echo "    </table>";
 }
 ?>
   </body>
