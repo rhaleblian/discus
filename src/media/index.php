@@ -89,17 +89,17 @@ if ($disc_id == "") {
       <tr><td>Folder</td><td>File</td></tr>
 <?php	
 	while ($row = mysql_fetch_assoc($result)) {
-		echo "      <tr>";
+		echo "<tr>";
 		if ($lastdir != $row['dir']) {
-			echo "        <td>",$row['dir'],"</td>";
+			echo "<td>",$row['dir'],"</td>";
 		} else {
-			echo "        <td></td>";
+			echo "<td></td>";
 		}
-		echo "        <td>",$row['name'],"</td>";
-		echo "      </tr>";
+		echo "<td>",$row['name'],"</td>";
+		echo "</tr>";
 		$lastdir = $row['dir'];
 	}
-	echo "    </table>";
+	echo "\n</table>\n";
 }
 ?>
   </body>
