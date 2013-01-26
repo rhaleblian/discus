@@ -15,7 +15,7 @@ function echorow($row) {
 	$status = $row['status'];
 	if ($status > 0) echo "<s>"; 
 	echo "<a href=\"?disc_id=", $id, "\">";
-	if (strlen($name) && strlen(label)) 
+	if (strlen($name) && strlen($label)) 
 		echo $label, " [", $name, "]</a>";
 	else if (strlen($name))
 		echo $name, "</a>";
@@ -28,7 +28,7 @@ function echorow($row) {
 $disc_id = $_GET['disc_id'];
 $extant = $_GET['extant'];
 if ($extant == "") {
-	$extant = 0;
+	$extant = 1;
 }
 
 $ini_path = "../../../.config/media.ini";
