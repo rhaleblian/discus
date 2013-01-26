@@ -15,12 +15,12 @@ function echorow($row) {
 	$status = $row['status'];
 	if ($status > 0) echo "<s>"; 
 	echo "<a href=\"?disc_id=", $id, "\">";
-	if (strlen($name) && strlen($label)) 
+	if (strlen($name) && strlen($label) && ($name != $label)) 
 		echo $label, " [", $name, "]</a>";
-	else if (strlen($name))
-		echo $name, "</a>";
-	else
+	else if (strlen($label))
 		echo $label, "</a>";
+	else
+		echo $name, "</a>";
 	if ($status > 0) echo "</s>";
 	echo "</br>\n";
 }
@@ -76,9 +76,9 @@ if ($disc_id == "") {
     
 	# Disc contents.
 
-	$sql  = "select file.* from disc ";
-	$sql .= "inner join file on disc.id=file.disc_id ";
-	$sql .= "where disc.id = '" . $disc_id . "'";
+	$sql  = "select file.* from disc";
+	$sql .= " inner join file on disc.id=file.disc_id";
+	$sql .= " where disc.id = '" . $disc_id . "'";
 	$result = mysql_query($sql);
 	$lastdir = "";
 ?>
