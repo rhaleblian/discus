@@ -57,7 +57,7 @@ def add(args, label=None, debug=True):
     if label and len(label):
         labelexpr = "'%s'" % escape(label)
     else:
-        labelexpr = disc
+        labelexpr = "'%s'" % disc
     sql = """insert into disc (name, label, format, status)
 values ('%s', %s, NULL, 0);""" % (escape(disc), labelexpr)
     rows = cursor.execute(sql)
