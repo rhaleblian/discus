@@ -39,6 +39,8 @@ def add(args, label=None, debug=True):
         if volinfo:
             disc = volinfo[0]
             format = volinfo[4]
+            if not label:
+                label = disc
     elif platform.system() == 'Darwin':
         # Allow passing the disc name
         # or a path to the mountpoint.
@@ -63,7 +65,7 @@ def add(args, label=None, debug=True):
     if label and len(label):
         labelexpr = "'%s'" % escape(label)
     else:
-        labelexpr = "'%s'" % disc
+        labelexpr = 'NULL'
     sql = """insert into disc (name, label, format, status)
 values ('%s', %s, NULL, 0);""" % (escape(disc), labelexpr)
     rows = cursor.execute(sql)
@@ -72,19 +74,20 @@ values ('%s', %s, NULL, 0);""" % (escape(disc), labelexpr)
     walkroot = path
     sql = ""
     for root, dirs, files in os.walk(walkroot):
-        for file in files:
+        for ffile in files:
             try:
-                st = os.stat(root + "/" + file)
+                st = os.stat(root + "/" + ffile)
             except:
                 pass
             
             root = re.sub(path, '', root)
+            print root, ffile
             t = time.strftime("%Y-%m-%d",
                               time.localtime(st.st_mtime))
             sql += """insert into file
                 (name,dir,disc_id,bytes,mtime)
                 values ('%s','%s',%d,'%s','%s');
-                """ % (escape(file),
+                """ % (escape(ffile),
                        escape(root),
                        iid,
                        st.st_size,
@@ -159,3 +162,4 @@ where disc_id = %s;""", (disc_id))
         if dnew != d:
             cursor.execute("""
 update file set dir = %s where id = %s;""", (dnew, idd))
+
