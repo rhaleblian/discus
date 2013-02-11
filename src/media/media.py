@@ -31,8 +31,14 @@ def add(args, label=None, debug=True):
         mountpoint = '/cygdrive/d'
         path = mountpoint
     elif platform.system() == 'Windows':
-        mountpoint = 'd:/'
+        import win32api
+        mountpoint = os.path.split(disc)[0]
         path = mountpoint
+        mountpoint = re.sub('[/|\\]$', '', mountpoint)
+        volinfo = win32api.GetVolumeInformation(mountpoint)
+        if volinfo:
+            disc = volinfo[0]
+            format = volinfo[4]
     elif platform.system() == 'Darwin':
         # Allow passing the disc name
         # or a path to the mountpoint.
@@ -153,4 +159,3 @@ where disc_id = %s;""", (disc_id))
         if dnew != d:
             cursor.execute("""
 update file set dir = %s where id = %s;""", (dnew, idd))
-

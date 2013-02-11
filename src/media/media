@@ -1,6 +1,6 @@
 #!/usr/bin/python
 """
-    Operations on media library index.
+    Operations on optical media catalog.
     Shell script.
 """
 import sys
