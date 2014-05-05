@@ -26,7 +26,7 @@ function echo_row($row) {
 $disc_id = $_GET['disc_id'];
 $extant = $_GET['extant'];
 if ($extant == "") {
-	$extant = 1;
+	$extant = 0;
 }
 
 $ini_path = "../../../.config/media.ini";
