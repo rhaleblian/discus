@@ -1,8 +1,10 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="/css/media.css" type="text/css">
-    <script type="text/javascript" src="retina.js"></script>
+    <link rel="stylesheet" href="/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/css/normalize.css" type="text/css">
+    <script type="text/javascript" src="/js/main.js"></script>
+    <script type="text/javascript" src="/js/plugins.js"></script>
 <?php
 
 function echo_row($row) {
@@ -11,15 +13,15 @@ function echo_row($row) {
 	$name = $row['name'];
 	$label = $row['label'];
 	$status = $row['status'];
-	if ($status > 0) echo "<s>"; 
-	echo "<a href=\"?disc_id=", $id, "\"><li><h2>";
-	if (strlen($name) && strlen($label) && ($name != $label)) 
+	if ($status > 0) echo "<s>";
+	echo "<a href=\"?disc_id=", $id, "\"><li>";
+	if (strlen($name) && strlen($label) && ($name != $label))
 		echo $label, " [", $name, "]";
 	else if (strlen($label))
 		echo $label;
 	else
 		echo $name;
-	echo "</h2></li></a>";
+	echo "</li></a>";
 	if ($status > 0) echo "</s>";
 }
 
@@ -29,11 +31,11 @@ if ($extant == "") {
 	$extant = 0;
 }
 
-$ini_path = "../../../.config/media.ini";
+$ini_path = "../../../ray/media.ini";
 $ini_array = parse_ini_file($ini_path);
 $conn = mysql_connect($ini_array["host"],
                       $ini_array["user"],
-                      $ini_array["passwd"]);
+                      $ini_array["password"]);
 $result = mysql_select_db($ini_array["db"]);
 
 if ($disc_id == "") {
@@ -85,10 +87,10 @@ if ($disc_id == "") {
 <?php
 	while ($row = mysql_fetch_assoc($result)) {
 		if ($prev_dir != $row['dir']) {
-			echo "[", $row['dir'], "]";
+			echo "<h4>", $row['dir'], "</h4>";
     		$prev_dir = $row['dir'];
 		}
-		echo "<h2>", $row['name'], "</h2>";
+		echo "<p>", $row['name'], "</p>";
 	}
     echo "</div>";
 }
