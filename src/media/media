@@ -24,8 +24,6 @@ if len(args) < 1:
     parser.print_help()
     exit(1)
 
-print args
-
 label = None
 if options.label:
     label = options.label
