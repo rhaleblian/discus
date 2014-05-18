@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" href="/css/main.css" type="text/css">
-    <link rel="stylesheet" href="/css/normalize.css" type="text/css">
-    <script type="text/javascript" src="/js/main.js"></script>
-    <script type="text/javascript" src="/js/plugins.js"></script>
+    <link rel="stylesheet" href="/boilerplate/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/boilerplate/css/normalize.css" type="text/css">
+    <script type="text/javascript" src="/boilerplate/js/main.js"></script>
+    <script type="text/javascript" src="/boilerplate/js/plugins.js"></script>
 <?php
 
 function echo_row($row) {
