@@ -21,3 +21,6 @@ uninstall-client:
 	rm $(PREFIX)/bin/media	
 	rm $(PYPREFIX)/site-packages/twiddlets/media.py
 
+deploy:
+	scp index.php haleblia@host233.hostmonster.com:public_html/ray/media/index.php
+

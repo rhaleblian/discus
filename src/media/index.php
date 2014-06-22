@@ -25,13 +25,16 @@ function echo_row($row) {
 	if ($status > 0) echo "</s>";
 }
 
-$disc_id = $_GET['disc_id'];
-$extant = $_GET['extant'];
-if ($extant == "") {
-	$extant = 0;
+$disc_id = "";
+if (array_key_exists('disc_id', $_GET)) {
+    $disc_id = $_GET['disc_id'];
+}
+$extant = 1;
+if (array_key_exists('extant', $_GET)) {
+    $extant = $_GET['extant'];
 }
 
-$ini_path = "../../../ray/media.ini";
+$ini_path = "/home1/haleblia/.config/media.ini";
 $ini_array = parse_ini_file($ini_path);
 $conn = mysql_connect($ini_array["host"],
                       $ini_array["user"],
