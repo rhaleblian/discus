@@ -1,10 +1,14 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <link rel="stylesheet" href="/boilerplate/css/main.css" type="text/css">
-    <link rel="stylesheet" href="/boilerplate/css/normalize.css" type="text/css">
-    <script type="text/javascript" src="/boilerplate/js/main.js"></script>
-    <script type="text/javascript" src="/boilerplate/js/plugins.js"></script>
+<head>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 <?php
 
 function echo_row($row) {
