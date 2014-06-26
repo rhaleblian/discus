@@ -21,9 +21,15 @@ def month_as_integer(abbrev):
     return None
 
 
+def config_path():
+    if platform.system() == 'Windows':
+        return os.path.join(os.getenv('USERPROFILE'), '.config', 'media.json')
+    else:
+        return os.path.join(os.getenv('HOME'), '.config', 'media.json')
+
+
 def connect():
-    confpath = os.path.join(os.getenv('HOME'), '.config', 'media.json')
-    conf = json.load(open(confpath))
+    conf = json.load(open(config_path()))
     return pymysql.connect(conf['host'], conf['user'], conf['passwd'], conf['db'])
 
 
