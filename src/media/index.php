@@ -19,6 +19,11 @@ function connect() {
     return $conn;
 }
 
+function status_string($code) {
+    if ($code == 0) { return "extant"; }
+    else { return "non-extant"; }
+}
+
 function disc_row($row) {
 	# return HTML for a row from the disc table.
 	$id = $row['id'];
@@ -27,7 +32,7 @@ function disc_row($row) {
 	$status = $row['status'];
 	$html = '<tr>';
 	$html .= '<td><a href="?disc_id="' . $id . '">' . $label . '</a></td>';
-	$html .= "<td>" . $name . "</td><td>" . $status . "</td>";
+	$html .= "<td>" . $name . "</td><td>" . status_string($status) . "</td>";
 	$html .= "</tr>";
     return $html;
 }
@@ -43,13 +48,6 @@ if (array_key_exists('extant', $_GET)) {
     $extant = $_GET['extant'];
 }
 
-#$ini_path = "/home1/haleblia/.config/media.ini";
-#$ini_array = parse_ini_file($ini_path);
-#$conn = mysql_connect($ini_array["host"],
-#                     $ini_array["user"],
-#                      $ini_array["password"]);
-#$result = mysql_select_db($ini_array["db"]);
-
 if ($disc_id == "") {
     # Available discs.
 ?>
@@ -61,7 +59,7 @@ if ($disc_id == "") {
 <tr>
 <th>Printed Label</th>
 <th>Volume Label</th>
-<th>Status Code</th>
+<th>Disposition</th>
 </tr>
 </thead>
 <tbody>
