@@ -31,7 +31,7 @@ function disc_row($row) {
 	$label = $row['label'];
 	$status = $row['status'];
 	$html = '<tr>';
-	$html .= '<td><a href="?disc_id="' . $id . '">' . $label . '</a></td>';
+	$html .= '<td><a href="?disc_id=' . $id . '">' . $label . '</a></td>';
 	$html .= "<td>" . $name . "</td><td>" . status_string($status) . "</td>";
 	$html .= "</tr>";
     return $html;
@@ -92,10 +92,11 @@ if ($disc_id == "") {
 	$sql  = "select file.* from disc";
 	$sql .= " inner join file on disc.id=file.disc_id";
 	$sql .= " where disc.id = '" . $disc_id . "'";
+	$sql .= " order by file.dir";
 	$result = mysql_query($sql);
 	$prev_dir = "";
 ?>
-    <div id="container">
+    <div class="container"><div class="col-md-8">
 <?php
 	while ($row = mysql_fetch_assoc($result)) {
 		if ($prev_dir != $row['dir']) {
@@ -104,7 +105,7 @@ if ($disc_id == "") {
 		}
 		echo "<p>", $row['name'], "</p>";
 	}
-    echo "</div>";
+    echo "</div></div>";
 }
 ?>
   </body>
