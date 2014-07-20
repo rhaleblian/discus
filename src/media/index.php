@@ -7,6 +7,7 @@
 <title>Optical Media Catalog</title>
 </head>
 <body class="body">
+<div class="container">
 <?php
 
 function connect() {
@@ -37,8 +38,39 @@ function disc_row($row) {
     return $html;
 }
 
+function search($term) {
+    echo "<p>Search: ", $term, "</p>";
+    echo '<table class="table">';
+    echo '<thead><tr><td>disc</td><td>file</td><td>folder</td></tr></thead>';
+    echo '<tbody>';
+    $sql = "SELECT * FROM file_view WHERE name LIKE '" . $term . "' OR dir LIKE '" . $term . "';";
+    $result = mysql_query($sql);
+    $rows = array();
+	while ($row = mysql_fetch_assoc($result)) {
+	    echo "<tr>";
+	    echo "<td>", $row['disc_label'], "</td>";
+	    echo "<td>", $row['name'], "</td>";
+	    echo "<td>", $row['dir'], "</td>";
+        echo "</tr>";
+		$rows[] = $row;
+	}
+    echo "</tbody></table>";
+#	$columns=1;
+#	$i=0;
+#	for ($column=1; $column<=$columns; $column++) {
+#		for (; $i<count($rows)*($column/$columns); $i++) {
+#			echo $rows[$i];
+#		}
+#	}
+#    return $rows;
+}
+
 connect();
 
+$term = "";
+if (array_key_exists('search', $_GET)) {
+    $term = $_GET['search'];
+}
 $disc_id = "";
 if (array_key_exists('disc_id', $_GET)) {
     $disc_id = $_GET['disc_id'];
@@ -48,10 +80,12 @@ if (array_key_exists('extant', $_GET)) {
     $extant = $_GET['extant'];
 }
 
-if ($disc_id == "") {
+if ($term != "") {
+    search($term);
+}
+else if ($disc_id == "") {
     # Available discs.
 ?>
-<div class="container">
 <div class="col-md-6">
 <h2>Optical Media Catalog - Discs</h2>
 <table class="table">
@@ -84,7 +118,7 @@ if ($disc_id == "") {
 ?>
 </tbody>
 </table>
-</div></div>
+</div>
 <?php
 } else {
 	# Disc contents.
@@ -105,8 +139,9 @@ if ($disc_id == "") {
 		}
 		echo "<p>", $row['name'], "</p>";
 	}
-    echo "</div></div>";
+    echo "</div>";
 }
 ?>
-  </body>
+</div>
+</body>
 </html>
