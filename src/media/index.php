@@ -1,13 +1,4 @@
 <!doctype html>
-<html lang="en">
-<head>
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-<!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">-->
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-<title>Optical Media Catalog</title>
-</head>
-<body class="body">
-<div class="container">
 <?php
 
 function connect() {
@@ -25,7 +16,13 @@ function status_string($code) {
     else { return "non-extant"; }
 }
 
-function disc_row($row) {
+function disc_label($id) {
+    $sql = "SELECT label from disc WHERE id=" . $id;
+    $result = mysql_query($sql);
+    return mysql_fetch_assoc($result)['label'];
+}
+
+function html_disc_row($row) {
 	# return HTML for a row from the disc table.
 	$id = $row['id'];
 	$name = $row['name'];
@@ -39,7 +36,7 @@ function disc_row($row) {
 }
 
 function search($term) {
-    echo "<p>Search: ", $term, "</p>";
+    echo "<h2>Search results for '", $term, "'</h2>";
     echo '<table class="table">';
     echo '<thead><tr><td>disc</td><td>file</td><td>folder</td></tr></thead>';
     echo '<tbody>';
@@ -55,14 +52,6 @@ function search($term) {
 		$rows[] = $row;
 	}
     echo "</tbody></table>";
-#	$columns=1;
-#	$i=0;
-#	for ($column=1; $column<=$columns; $column++) {
-#		for (; $i<count($rows)*($column/$columns); $i++) {
-#			echo $rows[$i];
-#		}
-#	}
-#    return $rows;
 }
 
 connect();
@@ -79,7 +68,20 @@ $extant = 1;
 if (array_key_exists('extant', $_GET)) {
     $extant = $_GET['extant'];
 }
+?>
 
+
+<html lang="en">
+<head>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">-->
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<title>Disc Catalog</title>
+</head>
+<body class="body">
+<div class="container">
+
+<?php
 if ($term != "") {
     search($term);
 }
@@ -87,7 +89,7 @@ else if ($disc_id == "") {
     # Available discs.
 ?>
 <div class="col-md-6">
-<h2>Optical Media Catalog - Discs</h2>
+<h2>Discs</h2>
 <table class="table">
 <thead>
 <tr>
@@ -112,7 +114,7 @@ else if ($disc_id == "") {
 	$i=0;
 	for ($column=1; $column<=$columns; $column++) {
 		for (; $i<count($rows)*($column/$columns); $i++) {
-			echo disc_row($rows[$i]);
+			echo html_disc_row($rows[$i]);
 		}
 	}
 ?>
@@ -129,9 +131,9 @@ else if ($disc_id == "") {
 	$sql .= " order by file.dir";
 	$result = mysql_query($sql);
 	$prev_dir = "";
-?>
-    <div class="container"><div class="col-md-8">
-<?php
+
+    echo '<h2>', disc_label($disc_id), '</h2>', "\n";
+    echo '<div class="col-md-8">', "\n";
 	while ($row = mysql_fetch_assoc($result)) {
 		if ($prev_dir != $row['dir']) {
 			echo "<h4>", $row['dir'], "</h4>";
@@ -139,7 +141,7 @@ else if ($disc_id == "") {
 		}
 		echo "<p>", $row['name'], "</p>";
 	}
-    echo "</div>";
+    echo "</div>\n";
 }
 ?>
 </div>
