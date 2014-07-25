@@ -43,7 +43,7 @@ function search($term) {
     echo '<table class="table">';
     echo '<thead><tr><td>disc</td><td>file</td><td>folder</td></tr></thead>';
     echo '<tbody>';
-    $sql = "SELECT * FROM file_view WHERE name LIKE '" . $term . "' OR dir LIKE '" . $term . "';";
+    $sql = "SELECT * FROM file_view WHERE name LIKE '%" . $term . "%' OR dir LIKE '%" . $term . "%';";
     $result = mysql_query($sql);
     $rows = array();
 	while ($row = mysql_fetch_assoc($result)) {
