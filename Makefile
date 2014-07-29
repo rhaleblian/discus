@@ -1,2 +1,2 @@
 install:
-	make -C src/media install
+	make -C python/media install
