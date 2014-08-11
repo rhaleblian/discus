@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+"""
+Prefix a set of files with a random number.
+"""
 import os
 import random
 import sys
