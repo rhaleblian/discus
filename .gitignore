@@ -3,6 +3,8 @@
 /.project
 /.pydevproject
 .DS_Store
+.idea
+build
+dist
 media.json
 media.ini
-.idea
