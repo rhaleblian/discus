@@ -1,10 +1,14 @@
+""" Musings re: Creation Kit and PyFFI.
+req: win32. python 3?
+"""
+import os
 import pyffi.formats.nif
 
+data_root = 'd:/programs/steam/steamapps/common/skyrim/data/unpack'
 paths = []
+paths.append(os.path.join(data_root, 'meshes/armor/ebony/m/boots_1.nif'))
 #paths.append('d:/programs/niftools/doomsicle/meshes/weapons/iron/1stpersondoomsicle.nif')
 #paths.append('c:/users/rhaleblian/documents/maya/projects/default/perfect.nif')
-#paths.append('d:/programs/niftools/skyrim/meshes/armor/ebony/m/boots_1.nif')
-paths.append('D:/programs/niftools/meshes/armor/ebony/m/boots_1.nif')
 
 for path in paths:
     fp = open(path, 'rb')
