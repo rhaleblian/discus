@@ -5,7 +5,7 @@
 """
 import sys
 from optparse import OptionParser
-from twiddlets import media
+import media
 
 parser = OptionParser(usage="""
 media <command> <command-args>
