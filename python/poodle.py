@@ -25,16 +25,16 @@ def gdata_cell_values():
         print cell_ent.cell.input_value  # get a current cell value
 
 
-def skreeeeek():
+def skreeeeek(do_move=False):
     """
     Scrape HTML from Shoeboxed add documents page, to get full image filenames.
+    Optionally move images to processing cubicle.
     """
     import os
     import shutil
     from xml.etree import cElementTree
 
-    home = os.getenv('USERPROFILE')
-    filename = home + '/Dropbox/Pictures/Receipt/web_snippet'
+    filename = 'D:/Dropbox/Pictures/Receipt/snippet.html'
 
     tree = cElementTree.parse(filename)
     root = tree.getroot()
@@ -42,13 +42,14 @@ def skreeeeek():
     names = [e.get('title') for e in elements if e.get('title') is not None]
 
     def move(names):
-        d_src = home + '/Dropbox/Pictures/Receipt/'
-        d_dst = home + '/Dropbox/Pictures/Receipt/Processing/'
+        d_src = 'D:/Dropbox/Pictures/Receipt/'
+        d_dst = 'D:/Dropbox/Pictures/Receipt/Processing/'
         for n in names:
             shutil.move(d_src + n, d_dst + n)
 
     print(names)
-    #move(names)
+    if do_move:
+        move(names)
 
 
 __author__ = 'rhaleblian'
