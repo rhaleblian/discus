@@ -1,15 +1,16 @@
 Various exercises, tests, and utilities.
 
-== c ==
+# c
 C/C++ twiddlings.
 
-== python ==
+# python
 Python twiddlings.
 
-== ruby ==
-Yup, twiddlings in Ruby.
+# ruby
+Just the Koans...
 
-== media ==
+# media
+
 Optical media cataloging system.
 
 On clients, create '$HOME/.config/media.json' based on 'example.media.json'.
