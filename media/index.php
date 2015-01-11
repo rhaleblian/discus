@@ -35,6 +35,69 @@ function html_disc_row($row) {
     return $html;
 }
 
+function echo_discs($extant) {
+	$sql = "select id, label, name, status from disc";
+	if ($extant == 1) {
+	   $sql .= " where status=0";
+	}
+	$sql .= " order by label";
+	$result = mysql_query($sql);
+	$rows = array();
+	while ($row = mysql_fetch_assoc($result)) {
+		$rows[] = $row;
+	}
+	$columns=1;
+	$i=0;
+	for ($column=1; $column<=$columns; $column++) {
+		for (; $i<count($rows)*($column/$columns); $i++) {
+			echo html_disc_row($rows[$i]);
+		}
+	}
+}
+
+function echo_disc_contents($disc_id) {
+	# Echo disc contents.
+
+	$sql  = "select file.* from disc";
+	$sql .= " inner join file on disc.id=file.disc_id";
+	$sql .= " where disc.id = '" . $disc_id . "'";
+	$sql .= " order by file.dir";
+	$result = mysql_query($sql);
+	$prev_dir = "";
+
+    echo '<h2>', disc_label($disc_id), '</h2>', "\n";
+    echo '<div class="col-md-8">', "\n";
+	while ($row = mysql_fetch_assoc($result)) {
+		if ($prev_dir != $row['dir']) {
+			echo "<h4>", $row['dir'], "</h4>";
+    		$prev_dir = $row['dir'];
+		}
+		echo "<p>", $row['name'], "</p>";
+	}
+    echo "</div>\n";
+}
+
+function echo_disc_contents_flat($disc_id) {
+	# Echo disc contents traditionally - as relative paths from the disc root.
+
+	$sql  = "select file.* from disc";
+	$sql .= " inner join file on disc.id=file.disc_id";
+	$sql .= " where disc.id = '" . $disc_id . "'";
+	$sql .= " order by file.dir";
+	$result = mysql_query($sql);
+
+    echo '<h2>', disc_label($disc_id), '</h2>', "\n";
+    echo '<div class="col-md-8">', "\n";
+	while ($row = mysql_fetch_assoc($result)) {
+	    if ($row['name'] != '') {
+            $dir = preg_replace('#^\.?/?#', '', $row['dir']);
+            if ($dir != '') $dir = $dir . '/';
+            echo "<p>", $dir, $row['name '], "</p>";
+        }
+    }
+    echo "</div>\n";
+}
+
 function search($term) {
     echo "<h2>Search results for '", $term, "'</h2>";
     echo '<table class="table">';
@@ -100,48 +163,14 @@ else if ($disc_id == "") {
 </thead>
 <tbody>
 <?php
-	$sql = "select id, label, name, status from disc";
-	if ($extant == 1) {
-	   $sql .= " where status=0";
-	}
-	$sql .= " order by label";
-	$result = mysql_query($sql);
-	$rows = array();
-	while ($row = mysql_fetch_assoc($result)) {
-		$rows[] = $row;
-	}
-	$columns=1;
-	$i=0;
-	for ($column=1; $column<=$columns; $column++) {
-		for (; $i<count($rows)*($column/$columns); $i++) {
-			echo html_disc_row($rows[$i]);
-		}
-	}
+    echo_discs($extant);
 ?>
 </tbody>
 </table>
 </div>
 <?php
 } else {
-	# Disc contents.
-
-	$sql  = "select file.* from disc";
-	$sql .= " inner join file on disc.id=file.disc_id";
-	$sql .= " where disc.id = '" . $disc_id . "'";
-	$sql .= " order by file.dir";
-	$result = mysql_query($sql);
-	$prev_dir = "";
-
-    echo '<h2>', disc_label($disc_id), '</h2>', "\n";
-    echo '<div class="col-md-8">', "\n";
-	while ($row = mysql_fetch_assoc($result)) {
-		if ($prev_dir != $row['dir']) {
-			echo "<h4>", $row['dir'], "</h4>";
-    		$prev_dir = $row['dir'];
-		}
-		echo "<p>", $row['name'], "</p>";
-	}
-    echo "</div>\n";
+    echo_disc_contents_flat($disc_id);
 }
 ?>
 </div>
