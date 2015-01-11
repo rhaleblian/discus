@@ -1,6 +1,6 @@
 {
   "host": "localhost",
-  "user": "media",
-  "passwd": "xxx",
+  "username": "media",
+  "password": "xxx",
   "db"  : "media"
 }

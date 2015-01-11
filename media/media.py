@@ -30,7 +30,7 @@ def config_path():
 
 def connect():
     conf = json.load(open(config_path()))
-    return pymysql.connect(conf['host'], conf['user'], conf['passwd'], conf['db'])
+    return pymysql.connect(conf['host'], conf['username'], conf['password'], conf['db'])
 
 
 def add(args, label=None, debug=True):

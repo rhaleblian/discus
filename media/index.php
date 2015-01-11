@@ -5,8 +5,8 @@ function connect() {
     $ini_path = "/home1/haleblia/.config/media.ini";
     $ini_array = parse_ini_file($ini_path);
     $conn = mysql_connect($ini_array["host"],
-                          $ini_array["user"],
-                          $ini_array["passwd"]);
+                          $ini_array["username"],
+                          $ini_array["password"]);
     $result = mysql_select_db($ini_array["db"]);
     return $conn;
 }
