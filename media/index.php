@@ -92,7 +92,7 @@ function echo_disc_contents_flat($disc_id) {
 	    if ($row['name'] != '') {
             $dir = preg_replace('#^\.?/?#', '', $row['dir']);
             if ($dir != '') $dir = $dir . '/';
-            echo "<p>", $dir, $row['name '], "</p>";
+            echo "<p>", $dir, $row['name'], "</p>";
         }
     }
     echo "</div>\n";
