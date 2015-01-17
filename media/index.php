@@ -202,8 +202,7 @@ if (array_key_exists('extant', $_GET)) {
   </div><!-- /.container-fluid -->
 </nav>
 
-  <div class="col-md-12">
-
+<div class="col-md-12">
 <?php
 if ($term != "") {
     search($term);
@@ -211,28 +210,27 @@ if ($term != "") {
 else if ($disc_id == "") {
     # Available discs.
 ?>
-<div class="col-md-6">
-<h2>Discs</h2>
-<table class="table">
-<thead>
-<tr>
-<th>Printed Label</th>
-<th>Volume Label</th>
-<th>Disposition</th>
-</tr>
-</thead>
-<tbody>
-<?php
-    echo_discs($extant);
-?>
-</tbody>
-</table>
-</div>
+    <div class="col-md-6">
+        <h2>Discs</h2>
+            <table class="table">
+            <thead>
+                <tr>
+                <th>Printed Label</th>
+                <th>Volume Label</th>
+                <th>Disposition</th>
+                </tr>
+            </thead>
+            <tbody>
+<?php echo_discs($extant); ?>
+            </tbody>
+        </table>
+    </div>
 <?php
 } else {
     echo_disc_contents_flat($disc_id);
 }
 ?>
-</div></div>
+</div>
+</div>
 </body>
 </html>
