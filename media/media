@@ -3,36 +3,40 @@
     Operations on optical media catalog.
     Shell script.
 """
+import argparse
 import sys
 from optparse import OptionParser
 import media
 
-parser = OptionParser(usage="""
-media <command> <command-args>
-
+parser = argparse.ArgumentParser(description="""
 Operations on the optical media library.
-
-Commands:
-  add <name>        add disc in drive to the library, as <name>
-  search <term>     print any rows in the library containing term
-  eject             eject disc
 """)
-parser.add_option('--label')
-(options,args) = parser.parse_args()
+subparsers = parser.add_subparsers(title='subcommands')
 
-if len(args) < 1:
-    parser.print_help()
-    exit(1)
-
-label = None
-if options.label:
-    label = options.label
-command = sys.argv[1]
-if command == 'search':
-    media.search(sys.argv[2:])
-elif command == 'add':
+def add(args):
+    label = None
+    if args.label:
+        label = options.label
     media.add(args, label)
-elif command == 'eject':
-    media.eject(sys.argv[2:])
-else:
-    print 'Error, unsupported command "%s"' % command
+    command = sys.argv[1]
+
+parser_add = subparsers.add_parser('add')
+parser_add.add_argument('--label', help='ignore volume label on media, use LABEL')
+parser_add.set_defaults(func=add)
+
+def search(args):
+    media.search(args.term)
+
+parser_search = subparsers.add_parser('search')
+parser_search.add_argument('term', help='search file and folder names for this term')
+parser_search.set_defaults(func=search)
+
+def eject(args):
+    media.eject(args)
+
+parser_eject = subparsers.add_parser('eject')
+parser_eject.set_defaults(func=eject)
+
+args = parser.parse_args()
+args.func(args)
+
