@@ -1,3 +1,2 @@
 WEBROOT=/Volumes/www
-PYPREFIX=$HOME/Library/Python/2.7
-
+PYPREFIX=$(HOME)/Library/Python/2.7

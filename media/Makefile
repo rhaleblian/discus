@@ -1,4 +1,4 @@
-PREFIX=/usr/local
+PREFIX=$(HOME)/usr/local
 include Makefile.$(shell uname)
 
 default:
@@ -15,7 +15,7 @@ install-client:
 	install media.py $(PYPREFIX)/site-packages/twiddlets
 
 install-server:
-	scp index.php haleblia@haleblian.com:public_html/ray/media/index.php
+	scp index.php halebs@haleblian.com:public_html/media/index.php
 
 uninstall-client:
 	rm $(PREFIX)/bin/media	

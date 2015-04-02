@@ -2,7 +2,7 @@
 <?php
 
 function connect() {
-    $ini_path = "/home1/haleblia/.config/media.ini";
+    $ini_path = "/home/halebs/.config/media.ini";
     $ini_array = parse_ini_file($ini_path);
     $conn = mysql_connect($ini_array["host"],
                           $ini_array["username"],
@@ -19,7 +19,9 @@ function status_string($code) {
 function disc_label($id) {
     $sql = "SELECT label from disc WHERE id=" . $id;
     $result = mysql_query($sql);
-    return mysql_fetch_assoc($result)['label'];
+    return 
+    $row = mysql_fetch_assoc($result);
+    return $row['label'];
 }
 
 function html_disc_row($row) {
