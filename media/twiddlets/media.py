@@ -89,7 +89,7 @@ def add(disc, label=None):
     sql = """insert into disc (name, label, format, status)
 values ('%s', %s, NULL, 0);""" % (escape(disc), labelexpr)
     rows = cursor.execute(sql)
-    if not len(rows):
+    if rows == 0:
         print 'warning: no rows inserted'
     iid = cursor.lastrowid
 
