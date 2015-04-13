@@ -1,11 +1,8 @@
 #!/usr/bin/python
-"""
-    Operations on optical media catalog.
+""" Operations on optical media catalog.
     Shell script.
 """
 import argparse
-import sys
-from optparse import OptionParser
 from twiddlets import media
 
 parser = argparse.ArgumentParser(description="""
@@ -18,7 +15,8 @@ def add(args):
 
 parser_add = subparsers.add_parser('add')
 parser_add.add_argument('--label', help='ignore volume label on media, use LABEL')
-parser_add.add_argument('path')
+parser_add.add_argument('path',
+                        help='path to media (name when dropped on shortcut)')
 parser_add.set_defaults(func=add)
 
 def search(args):

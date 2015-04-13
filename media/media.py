@@ -1,21 +1,29 @@
 #!/usr/bin/python
 """
     Operations on optical media catalog.
-    Shell script.
+    Called by shell script.
 """
 import json, os, time, re, platform
 import pymysql
 
 
 def escape(expr):
+    """
+    :param expr: str
+    :return: str, backslash-escaped expr
+    """
     return re.sub('\'', '\\\'', expr)
 
 
 def month_as_integer(abbrev):
-    ab = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-          'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')
+    """
+    :param abbrev: Jan, etc
+    :return: int, month number
+    """
+    abbrevs = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+               'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')
     for i in range(0, 11):
-        if ab[i] == abbrev:
+        if abbrevs[i] == abbrev:
             return i+1
     return None
 
@@ -92,21 +100,21 @@ values ('%s', %s, NULL, 0);""" % (escape(disc), labelexpr)
         print root
         for name in files:
             try:
-                st = os.stat(root + '/' + name)
-            except:
+                stats = os.stat(root + '/' + name)
+            except OSError:
                 pass
             
             root = re.sub(path, '', root)
-            t = time.strftime("%Y-%m-%d",
-                              time.localtime(st.st_mtime))
+            t_mod = time.strftime("%Y-%m-%d",
+                                  time.localtime(stats.st_mtime))
             sql += """insert into file
                 (name,dir,disc_id,bytes,mtime)
                 values ('%s','%s',%d,'%s','%s');
                 """ % (escape(name),
                        escape(root),
                        iid,
-                       st.st_size,
-                       t)
+                       stats.st_size,
+                       t_mod)
     rows = cursor.execute(sql)
 
 
