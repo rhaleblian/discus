@@ -3,8 +3,7 @@
     Operations on optical media catalog.
     Shell script.
 """
-import json, os, sys, time, re, platform
-from stat import *
+import json, os, time, re, platform
 import pymysql
 
 
@@ -13,9 +12,9 @@ def escape(expr):
 
 
 def month_as_integer(abbrev):
-    ab = ('Jan','Feb','Mar','Apr','May','Jun',
-          'Jul','Aug','Sep','Oct','Nov','Dec')
-    for i in range(0,11):
+    ab = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+          'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')
+    for i in range(0, 11):
         if ab[i] == abbrev:
             return i+1
     return None
@@ -30,17 +29,16 @@ def config_path():
 
 def connect():
     conf = json.load(open(config_path()))
-    return pymysql.connect(conf['host'], conf['username'], conf['password'], conf['db'])
+    return pymysql.connect(conf['host'],
+                           conf['username'],
+                           conf['password'],
+                           conf['db'])
 
 
-def add(args, label=None, debug=True):
+def add(disc, label=None):
     """ Add disc contents to index. """
-    (_unused, disc) = args
     disc = re.sub('/$', '', disc)
-    if re.match('CYGWIN.+', platform.system()):
-        mountpoint = '/cygdrive/d'
-        path = mountpoint
-    elif platform.system() == 'Windows':
+    if platform.system() == 'Windows':
         import win32api
         mountpoint = os.path.split(disc)[0]
         mountpoint = re.sub(r'\\', '', mountpoint) 
@@ -48,7 +46,7 @@ def add(args, label=None, debug=True):
         volinfo = win32api.GetVolumeInformation(mountpoint)
         if volinfo:
             disc = volinfo[0]
-            format = volinfo[4]
+            #disc_format = volinfo[4]
             if not label:
                 label = disc
     elif platform.system() == 'Darwin':
@@ -63,6 +61,9 @@ def add(args, label=None, debug=True):
         else:
             path = disc
             disc = os.path.split(path)[1]
+    elif re.match('CYGWIN.+', platform.system()):
+        mountpoint = '/cygdrive/d'
+        path = mountpoint
     else:
         path = disc
         disc = os.path.split(path)[1]
@@ -80,11 +81,13 @@ def add(args, label=None, debug=True):
     sql = """insert into disc (name, label, format, status)
 values ('%s', %s, NULL, 0);""" % (escape(disc), labelexpr)
     rows = cursor.execute(sql)
+    if not len(rows):
+        print 'warning: no rows inserted'
     iid = cursor.lastrowid
 
     walkroot = path
     sql = ""
-    for root, dirs, files in os.walk(walkroot):
+    for root, _unused, files in os.walk(walkroot):
         root = re.sub('\\\\', '/', root)
         print root
         for name in files:
