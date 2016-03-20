@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 """
     Operations on optical media catalog.
     Called by shell script.
