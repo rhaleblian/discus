@@ -13,5 +13,5 @@ Just the Koans...
 
 Optical media cataloging system.
 
-On clients, create '$HOME/.config/media.json' based on 'example.media.json'.
-On the server, create '$HOME/.config/media.ini' based on 'example.media.ini'.
+On clients, create '$HOME/.config/yoyodyne/media.json' based on 'example.media.json'.
+On the server, create '$HOME/.config/yoyodyne/media.ini' based on 'example.media.ini'.

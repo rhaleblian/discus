@@ -30,9 +30,9 @@ def month_as_integer(abbrev):
 
 def config_path():
     if platform.system() == 'Windows':
-        return os.path.join(os.getenv('USERPROFILE'), '.config', 'twiddlets', 'media.json')
+        return os.path.join(os.getenv('USERPROFILE'), '.config', 'yoyodyne', 'media.json')
     else:
-        return os.path.join(os.getenv('HOME'), '.config', 'twiddlets', 'media.json')
+        return os.path.join(os.getenv('HOME'), '.config', 'yoyodyne', 'media.json')
 
 
 def connect():

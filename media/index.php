@@ -2,7 +2,7 @@
 <?php
 
 function connect() {
-    $ini_path = "/home/halebs/.config/media.ini";
+    $ini_path = "/home/halebs/.config/yoyodyne/media.ini";
     $ini_array = parse_ini_file($ini_path);
     $conn = mysql_connect($ini_array["host"],
                           $ini_array["username"],
