@@ -1,9 +1,9 @@
-#!/usr/bin/python
+#!/usr/bin/env python2.7
 """ Operations on optical media catalog.
     Shell script.
 """
 import argparse
-from twiddlets import media
+from yoyodyne import media
 
 parser = argparse.ArgumentParser(description="""
 Operations on the optical media library.

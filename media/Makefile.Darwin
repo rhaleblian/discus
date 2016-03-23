@@ -1,1 +1,1 @@
-PYTHON_SITE=$(HOME)/Library/Python/2.7/site-packages
+PYTHON_SITE=$(PREFIX)/Library/Python/2.7/site-packages
