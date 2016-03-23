@@ -9,8 +9,8 @@ install-client:
 	install -d $(PREFIX)/bin
 	install media $(PREFIX)/bin
 	install -d $(PYTHON_SITE)/twiddlets
-	install __init__.py $(PYTHON_SITE)/twiddlets
-	install media.py $(PYTHON_SITE)/twiddlets
+	install twiddlets/__init__.py $(PYTHON_SITE)/twiddlets
+	install twiddlets/media.py $(PYTHON_SITE)/twiddlets
 
 install-server:
 	scp index.php halebs@haleblian.com:public_html/media/index.php
