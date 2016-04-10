@@ -49,7 +49,7 @@ def add(disc, label=None):
     if platform.system() == 'Windows':
         import win32api
         mountpoint = os.path.split(disc)[0]
-        mountpoint = re.sub(r'\\', '', mountpoint) 
+        mountpoint = re.sub(r'\\', '', mountpoint)
         path = mountpoint
         volinfo = win32api.GetVolumeInformation(mountpoint)
         if volinfo:
@@ -103,7 +103,7 @@ values ('%s', %s, NULL, 0);""" % (escape(disc), labelexpr)
                 stats = os.stat(root + '/' + name)
             except OSError:
                 pass
-            
+
             root = re.sub(path, '', root)
             t_mod = time.strftime("%Y-%m-%d",
                                   time.localtime(stats.st_mtime))
@@ -143,6 +143,20 @@ def search(args):
     if not rows:
         return
     rows = cursor.fetchall()
+    for row in rows:
+        print row
+
+
+def dumpnosql(table_name):
+    sql = """select * from %s;""" % table_name
+    print sql
+    connection = connect()
+    cursor = connection.cursor()
+    rows = cursor.execute(sql)
+    if not rows:
+        return
+    rows = cursor.fetchall()
+    items = []
     for row in rows:
         print row
 
