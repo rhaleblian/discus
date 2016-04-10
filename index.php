@@ -1,8 +1,18 @@
 <!doctype html>
 <?php
 
+function connect_cloud9() {
+    $host = 'localhost';
+    $username = 'rhaleblian';
+    $password = '';
+    $db = 'media';
+    $conn = mysql_connect($host, $username, $password);
+    $result = mysql_select_db($db);
+    return $conn;
+}
+
 function connect() {
-    $ini_path = "/home/halebs/.config/yoyodyne/media.ini";
+    $ini_path = getenv('HOME') + '/home/halebs/.config/yoyodyne/media.ini';
     $ini_array = parse_ini_file($ini_path);
     $conn = mysql_connect($ini_array["host"],
                           $ini_array["username"],
@@ -106,21 +116,27 @@ function search($term) {
     echo '<thead><tr><td>disc</td><td>file</td><td>folder</td></tr></thead>';
     echo '<tbody>';
     $sql = "SELECT * FROM entry WHERE name LIKE '%" . $term . "%' OR dir LIKE '%" . $term . "%' LIMIT 256;";
-    echo "<p>" . $sql . "</p>\n";
+    #echo "<p>" . $sql . "</p>\n";
     $result = mysql_query($sql);
     $rows = array();
-	while ($row = mysql_fetch_assoc($result)) {
+	  while ($row = mysql_fetch_assoc($result)) {
 	    echo "<tr>";
 	    echo "<td>", $row['disc_label'], "</td>";
 	    echo "<td>", $row['name'], "</td>";
 	    echo "<td>", $row['dir'], "</td>";
-        echo "</tr>";
-		$rows[] = $row;
-	}
+      echo "</tr>";
+		  $rows[] = $row;
+	  }
     echo "</tbody></table>";
 }
 
-connect();
+$baseurl = '/media';
+if (getenv('C9_PROJECT') == 'discus') {
+  $baseurl = '/';
+  connect_cloud9();
+} else {
+  connect();
+}
 
 $term = "";
 if (array_key_exists('search', $_GET)) {
@@ -159,7 +175,7 @@ if (array_key_exists('extant', $_GET)) {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/media">Disc Catalog</a>
+      <a class="navbar-brand" href="<?php $basedir ?>">Disc Catalog</a>
     </div>
     <!-- Collect the nav links, forms, and other content for toggling -->
 <!--
@@ -181,11 +197,11 @@ if (array_key_exists('extant', $_GET)) {
         </li>
       </ul>
 -->
-      <form class="navbar-form navbar-left" action="/media" method="get" role="search">
+      <form class="navbar-form navbar-left" action="<?php $basedir ?>" method="get" role="search">
         <div class="form-group">
-          <input type="text" class="form-control" name="search" placeholder="Search">
-        </div>
-        <button type="submit" class="btn btn-default">Submit</button>
+          <input type="text" class="form-control" name="search" placeholder="">
+        </div> 
+        <button type="submit" class="btn btn-default">Search</button>
       </form>
       <!--
       <ul class="nav navbar-nav navbar-right">
