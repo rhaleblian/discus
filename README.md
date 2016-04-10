@@ -1,7 +1,7 @@
 # Discus
 
 *discus* is a system that keeps catalogs of files on optical discs.
-Discus includes droplets for Windows and OS X clients
+*discus* includes droplets for Windows and OS X clients
 which allow the user to add an optical disc.
 A wep app provides file and disc name retrieval.
 
@@ -28,5 +28,5 @@ module namespace.
     cp template/media.ini $HOME/.config/yoyodyne/media.ini
 
 and edit it.
-Ray's Cloud9 workspace 'discus' does not
+Ray's Cloud9 workspace `discus` does not
 require this server setup.
