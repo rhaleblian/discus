@@ -1,16 +1,3 @@
-Various exercises, tests, and utilities.
-
-# c
-C/C++ twiddlings.
-
-# python
-Python twiddlings.
-
-# ruby
-Just the Koans...
-
-# media
-
 Optical media cataloging system.
 
 On clients, create
