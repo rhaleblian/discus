@@ -1,8 +1,8 @@
 # Discus
 
-A system that catalogs file listing of optical
-data discs, Discus includes droplets for Windows and OS X
-clients which allow the user to add an optical disc.
+*discus* is a system that keeps catalogs of files on optical discs.
+Discus includes droplets for Windows and OS X clients
+which allow the user to add an optical disc.
 A wep app provides file and disc name retrieval.
 
 ![screenshot](http://discus-rhaleblian.c9users.io/README.png "Screen Shot")
