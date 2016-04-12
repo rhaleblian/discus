@@ -29,7 +29,6 @@ function status_string($code) {
 function disc_label($id) {
     $sql = "SELECT label from disc WHERE id=" . $id;
     $result = mysql_query($sql);
-    return 
     $row = mysql_fetch_assoc($result);
     return $row['label'];
 }
@@ -247,7 +246,7 @@ else if ($disc_id == "") {
     </div>
 <?php
 } else {
-    echo_disc_contents_flat($disc_id);
+    echo_disc_contents($disc_id);
 }
 ?>
 </div>
