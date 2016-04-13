@@ -1,5 +1,7 @@
 PREFIX=$(HOME)
 PYTHON_SITE=$(PREFIX)/lib/python/site-packages
+DESTDIR=halebs@haleblian.com:public_html/
+
 include Makefile.$(shell uname)
 
 install: install-client install-server
@@ -13,7 +15,8 @@ install-client:
 	install yoyodyne/media.py $(PYTHON_SITE)/yoyodyne
 
 install-server:
-	scp index.php halebs@haleblian.com:public_html/media/index.php
+	scp favicon.png $(DESTDIR)
+	scp index.php $(DESTDIR)/media
 
 uninstall-client:
 	- rm $(PREFIX)/bin/media
