@@ -1,6 +1,7 @@
 <!doctype html>
 <?php
 
+<<<<<<< 2782504152648f379128c4bbcb883465f1297f77
 function connect($hosted_user) {
   $ini_path = posix_getpwnam($hosted_user)['dir'] . '/.config/yoyodyne/media.ini';
   $ini_array = parse_ini_file($ini_path);
@@ -9,6 +10,26 @@ function connect($hosted_user) {
                         $ini_array["password"]);
   $result = mysql_select_db($ini_array["database"]);
   return $conn;
+=======
+function connect_cloud9() {
+    $host = 'localhost';
+    $username = 'rhaleblian';
+    $password = '';
+    $db = 'media';
+    $conn = mysql_connect($host, $username, $password);
+    $result = mysql_select_db($db);
+    return $conn;
+}
+
+function connect() {
+    $ini_path = 'media.ini';
+    $ini_array = parse_ini_file($ini_path);
+    $conn = mysql_connect($ini_array["host"],
+                          $ini_array["username"],
+                          $ini_array["password"]);
+    $result = mysql_select_db($ini_array["db"]);
+    return $conn;
+>>>>>>> Read ini from current dir.
 }
 
 function status_string($code) {
@@ -64,17 +85,19 @@ function echo_disc_contents($disc_id) {
 	$sql .= " where disc.id = '" . $disc_id . "'";
 	$sql .= " order by file.dir";
 	$result = mysql_query($sql);
-	$prev_dir = "";
 
     echo '<h2>', disc_label($disc_id), '</h2>', "\n";
     echo '<div class="col-md-8">', "\n";
+    echo '<table class="table">';
+    echo '<thead><tr><td>file</td><td>folder</td></tr></thead>';
+    echo '<tbody>';
 	while ($row = mysql_fetch_assoc($result)) {
-		if ($prev_dir != $row['dir']) {
-			echo "<h4>", $row['dir'], "</h4>";
-    		$prev_dir = $row['dir'];
-		}
-		echo "<p>", $row['name'], "</p>";
+	    echo "<tr>";
+	    echo "<td>", $row['name'], "</td>";
+	    echo "<td>", $row['dir'], "</td>";
+        echo "</tr>";
 	}
+    echo "</tbody></table>";
     echo "</div>\n";
 }
 
@@ -121,12 +144,17 @@ function search($term) {
 
 $baseurl = '';
 if (getenv('C9_PROJECT') == 'discus') {
+<<<<<<< 2782504152648f379128c4bbcb883465f1297f77
   $baseurl = '/';
   connect('rhaleblian');
 } else {
   $baseurl = '/media';
   connect('halebs');
+=======
+    $baseurl = '/';
+>>>>>>> Read ini from current dir.
 }
+connect();
 
 $term = "";
 if (array_key_exists('search', $_GET)) {
@@ -167,47 +195,13 @@ if (array_key_exists('extant', $_GET)) {
       </button>
       <a class="navbar-brand" href="<?php $basedir ?>">Disc Catalog</a>
     </div>
-    <!-- Collect the nav links, forms, and other content for toggling -->
-<!--
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-        <li><a href="#">Link</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-            <li class="divider"></li>
-            <li><a href="#">One more separated link</a></li>
-          </ul>
-        </li>
-      </ul>
--->
+
       <form class="navbar-form navbar-left" action="<?php $basedir ?>" method="get" role="search">
         <div class="form-group">
           <input type="text" class="form-control" name="search" placeholder="">
         </div>
         <button type="submit" class="btn btn-default">Search</button>
       </form>
-      <!--
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Link</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-          </ul>
-        </li>
-      </ul>
-      -->
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
