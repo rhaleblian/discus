@@ -1,24 +1,14 @@
 <!doctype html>
 <?php
 
-function connect_cloud9() {
-    $host = 'localhost';
-    $username = 'rhaleblian';
-    $password = '';
-    $db = 'media';
-    $conn = mysql_connect($host, $username, $password);
-    $result = mysql_select_db($db);
-    return $conn;
-}
-
-function connect() {
-    $ini_path = getenv('HOME') + '/home/halebs/.config/yoyodyne/media.ini';
-    $ini_array = parse_ini_file($ini_path);
-    $conn = mysql_connect($ini_array["host"],
-                          $ini_array["username"],
-                          $ini_array["password"]);
-    $result = mysql_select_db($ini_array["db"]);
-    return $conn;
+function connect($hosted_user) {
+  $ini_path = posix_getpwnam($hosted_user)['dir'] . '/.config/yoyodyne/media.ini';
+  $ini_array = parse_ini_file($ini_path);
+  $conn = mysql_connect($ini_array["host"],
+                        $ini_array["user"],
+                        $ini_array["password"]);
+  $result = mysql_select_db($ini_array["database"]);
+  return $conn;
 }
 
 function status_string($code) {
@@ -49,7 +39,7 @@ function html_disc_row($row) {
 function echo_discs($extant) {
 	$sql = "select id, label, name, status from disc";
 	if ($extant == 1) {
-	   $sql .= " where status=0";
+	  $sql .= " where status=0";
 	}
 	$sql .= " order by label";
 	$result = mysql_query($sql);
@@ -129,12 +119,13 @@ function search($term) {
     echo "</tbody></table>";
 }
 
-$baseurl = '/media';
+$baseurl = '';
 if (getenv('C9_PROJECT') == 'discus') {
   $baseurl = '/';
-  connect_cloud9();
+  connect('rhaleblian');
 } else {
-  connect();
+  $baseurl = '/media';
+  connect('halebs');
 }
 
 $term = "";
@@ -199,7 +190,7 @@ if (array_key_exists('extant', $_GET)) {
       <form class="navbar-form navbar-left" action="<?php $basedir ?>" method="get" role="search">
         <div class="form-group">
           <input type="text" class="form-control" name="search" placeholder="">
-        </div> 
+        </div>
         <button type="submit" class="btn btn-default">Search</button>
       </form>
       <!--
