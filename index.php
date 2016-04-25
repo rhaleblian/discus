@@ -1,7 +1,6 @@
 <!doctype html>
 <?php
 
-<<<<<<< 2782504152648f379128c4bbcb883465f1297f77
 function connect($hosted_user) {
   $ini_path = posix_getpwnam($hosted_user)['dir'] . '/.config/yoyodyne/media.ini';
   $ini_array = parse_ini_file($ini_path);
@@ -10,26 +9,6 @@ function connect($hosted_user) {
                         $ini_array["password"]);
   $result = mysql_select_db($ini_array["database"]);
   return $conn;
-=======
-function connect_cloud9() {
-    $host = 'localhost';
-    $username = 'rhaleblian';
-    $password = '';
-    $db = 'media';
-    $conn = mysql_connect($host, $username, $password);
-    $result = mysql_select_db($db);
-    return $conn;
-}
-
-function connect() {
-    $ini_path = 'media.ini';
-    $ini_array = parse_ini_file($ini_path);
-    $conn = mysql_connect($ini_array["host"],
-                          $ini_array["username"],
-                          $ini_array["password"]);
-    $result = mysql_select_db($ini_array["db"]);
-    return $conn;
->>>>>>> Read ini from current dir.
 }
 
 function status_string($code) {
@@ -144,15 +123,11 @@ function search($term) {
 
 $baseurl = '';
 if (getenv('C9_PROJECT') == 'discus') {
-<<<<<<< 2782504152648f379128c4bbcb883465f1297f77
   $baseurl = '/';
   connect('rhaleblian');
 } else {
   $baseurl = '/media';
   connect('halebs');
-=======
-    $baseurl = '/';
->>>>>>> Read ini from current dir.
 }
 connect();
 
