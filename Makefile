@@ -2,7 +2,7 @@ PREFIX=$(HOME)
 PYTHON_SITE=$(PREFIX)/lib/python/site-packages
 DESTDIR=halebs@haleblian.com:public_html/
 
-include make-platform/Makefile.$(shell uname)
+include platform/Makefile.$(shell uname)
 
 install: install-client install-server
 uninstall: uninstall-client
