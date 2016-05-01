@@ -17,6 +17,7 @@ install-client:
 install-server:
 	scp favicon.png $(DESTDIR)
 	scp index.php $(DESTDIR)/media
+	scp model.php $(DESTDIR)/media
 
 uninstall-client:
 	- rm $(PREFIX)/bin/media
