@@ -1,6 +1,6 @@
 {
-  "host": "localhost",
-  "username": "media",
-  "password": "xxx",
+  "host": "remotehost",
+  "username": "user",
+  "password": "pass",
   "db"  : "media"
 }

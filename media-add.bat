@@ -1,3 +1,3 @@
-cd D:\Developer\twiddlets
-D:\programs\python27\python media\media add %1
+cd D:\Developer\discus
+C:\python27\python media add %1
 pause
