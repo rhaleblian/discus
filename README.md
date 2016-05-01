@@ -16,24 +16,37 @@ A web app provides file and disc name retrieval.
     ssh remotehost
     mkdir $HOME/.config/yoyodyne/media.ini
     cp template/media.ini $HOME/.config/yoyodyne/media.ini
+    make install-server
+    
+### Desktop Client
 
-### Client
-
-    mkdir $HOME/.config/yoyodyne
+    mkdir -p $HOME/.config/yoyodyne
     cp template/media.json $HOME/.config/yoyodyne/media.json
 
 and edit it.
 
 #### Windows
 
+Install ActiveState Python 2.7, including the Win32 extensions, to `C:\Python27`.
+
+Clone and install:
+
     cd /cygdrive/d/Developer
-    git clone ...
+    git clone https://github.com/rhaleblian/discus.git
+    make install-client
     
-2. Install ActiveState Python 2.7, including the Win32 extensions, to `C:\Python27`.
-3. Clone to D:\Developer\discus.
-4. Create a Desktop shortcut to `media-add.bat`.
+Create a Desktop shortcut to `media-add.bat`.
 
 #### OS X
 
-1. Copy the Automator droplet `Add to Media Catalog.app` to the Desktop.
-2. Package `yoyodyne` needs to be in Python's module namespace.
+Install pymysql.
+
+Clone and install:
+
+    cd ~/Developer
+    git clone https://github.com/rhaleblian/discus.git
+    make install-client
+    
+Copy the Automator droplet `Add to Media Catalog.app` to the Desktop:
+
+    cp -r 'platform/osx/Automator/Add to Media Catalog.app' ~/Desktop
