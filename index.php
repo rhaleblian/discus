@@ -1,8 +1,9 @@
 <!doctype html>
 <?php
 
-function connect($hosted_user) {
-  $ini_path = posix_getpwnam($hosted_user)['dir'] . '/.config/yoyodyne/media.ini';
+function connect() {
+  $ini_path = '/home/halebs/.config/yoyodyne/media.ini';
+  error_log('ini_path=' + $ini_path + '\n');
   $ini_array = parse_ini_file($ini_path);
   $conn = mysql_connect($ini_array["host"],
                         $ini_array["user"],
@@ -122,13 +123,6 @@ function search($term) {
 }
 
 $baseurl = '';
-if (getenv('C9_PROJECT') == 'discus') {
-  $baseurl = '/';
-  connect('rhaleblian');
-} else {
-  $baseurl = '/media';
-  connect('halebs');
-}
 connect();
 
 $term = "";

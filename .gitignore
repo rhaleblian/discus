@@ -2,6 +2,7 @@
 *.pyc
 /.project
 /.pydevproject
+/info.php
 .DS_Store
 .idea
 build

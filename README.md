@@ -9,33 +9,31 @@ A web app provides file and disc name retrieval.
 
 ![screenshot](http://discus-rhaleblian.c9users.io/README.png "Screen Shot")
 
-The current incarnation of Discus uses http://c9.io
-aka Cloud9 for development.
+## Configuration
 
-## Server configuration
+### Web App
 
     ssh remotehost
     mkdir $HOME/.config/yoyodyne/media.ini
     cp template/media.ini $HOME/.config/yoyodyne/media.ini
 
-## Client configuration
+### Client
 
     mkdir $HOME/.config/yoyodyne
     cp template/media.json $HOME/.config/yoyodyne/media.json
 
 and edit it.
 
-### Windows
+#### Windows
 
-Install ActiveState Python 2.7, including the Win32 extensions, to `C:\Python27`.
-Clone to D:\Developer\discus.
-Create a Desktop shortcut to `media-add.bat`.
+    cd /cygdrive/d/Developer
+    git clone ...
+    
+2. Install ActiveState Python 2.7, including the Win32 extensions, to `C:\Python27`.
+3. Clone to D:\Developer\discus.
+4. Create a Desktop shortcut to `media-add.bat`.
 
-### OS X
+#### OS X
 
-Copy the Automator droplet `Add to Media Catalog.app` to the Desktop.
-Package `yoyodyne` needs to be in Python's module namespace.
-
-and edit it.
-Ray's Cloud9 workspace `discus` does not
-require this server setup.
+1. Copy the Automator droplet `Add to Media Catalog.app` to the Desktop.
+2. Package `yoyodyne` needs to be in Python's module namespace.
