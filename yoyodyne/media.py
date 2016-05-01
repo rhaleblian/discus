@@ -118,14 +118,8 @@ values ('%s', %s, NULL, 0);""" % (escape(disc), labelexpr)
     rows = cursor.execute(sql)
 
 
-def search(args):
-    """ Return rows in index containing pattern. """
-    field = 'file'
-    pattern = '%'
-    if len(args) == 1:
-        (pattern,) = args
-    elif len(args) == 2:
-        (field, pattern) = args
+def search(term, field='file'):
+    """ Return rows in index containing pattern :term:. """
 
     sql = """select disc.label,file.dir,file.name from disc
              inner join file on disc.id = file.disc_id where """
@@ -133,9 +127,9 @@ def search(args):
         sql += "dir.name"
     elif field == 'disc':
         sql += "disc.label"
-    else:
+    elif field == 'file':
         sql += 'file.name'
-        sql += " like '%%%s%%';" % pattern
+    sql += " like '%%%s%%';" % term
 
     connection = connect()
     cursor = connection.cursor()
