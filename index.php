@@ -1,7 +1,7 @@
 <!doctype html>
 <?php
 
-require('model.php');
+require 'model.php';
 
 $baseurl = '';
 connect();
