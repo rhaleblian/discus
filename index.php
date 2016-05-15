@@ -23,7 +23,7 @@ if (array_key_exists('extant', $_GET)) {
 <html lang="en">
     
     <head>
-        <title>Disc Catalog</title>
+        <title>Discus</title>
 
         <link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
         <link rel="icon" href="/favicon.png" type="image/x-icon">
@@ -44,7 +44,7 @@ if (array_key_exists('extant', $_GET)) {
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="<?php $baseurl ?>">Disc Catalog</a>
+                        <a class="navbar-brand" href="<?php $baseurl ?>">Discus</a>
                     </div>
                     <form class="navbar-form navbar-left" action="<?php $basedir ?>" method="get" role="search">
                         <div class="form-group">
