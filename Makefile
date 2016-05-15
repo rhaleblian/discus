@@ -1,6 +1,6 @@
 PREFIX=$(HOME)
 PYTHON_SITE=$(PREFIX)/lib/python/site-packages
-DESTDIR=halebs@haleblian.com:public_html/
+DESTDIR=halebs@haleblian.com:public_html/ray/discus
 
 include platform/Makefile.$(shell uname)
 
@@ -16,8 +16,8 @@ install-client:
 
 install-server:
 	scp favicon.png $(DESTDIR)
-	scp index.php $(DESTDIR)/media
-	scp model.php $(DESTDIR)/media
+	scp index.php $(DESTDIR)
+	scp model.php $(DESTDIR)
 
 uninstall-client:
 	- rm $(PREFIX)/bin/media
