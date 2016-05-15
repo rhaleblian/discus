@@ -1,6 +1,7 @@
 PREFIX=$(HOME)
 PYTHON_SITE=$(PREFIX)/lib/python/site-packages
-DESTDIR=halebs@haleblian.com:public_html/ray/discus
+DESTSSH=halebs@haleblian.com
+DESTDIR=$(DESTSSH):public_html/ray/discus
 
 include platform/Makefile.$(shell uname)
 
@@ -24,3 +25,6 @@ uninstall-client:
 	- rm $(PYTHON_SITE)/yoyodyne/media.py[c]
 	- rm $(PYTHON_SITE)/yoyodyne/__init__.py[c]
 	- rmdir $(PYTHON_SITE)/yoyodyne
+
+uninstall-server:
+	ssh $(DESTSSH) rm -r public_html/ray/discus
