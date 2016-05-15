@@ -3,7 +3,7 @@
 
 require 'model.php';
 
-$baseurl = '';
+$baseurl = 'ray/discus';
 connect();
 
 $term = "";
@@ -20,16 +20,17 @@ if (array_key_exists('extant', $_GET)) {
 }
 ?>
 
-
 <html lang="en">
-<head>
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-<!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">-->
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-<link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
-<link rel="icon" href="/favicon.png" type="image/x-icon">
-<title>Disc Catalog</title>
-</head>
+    
+    <head>
+        <title>Disc Catalog</title>
+
+        <link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
+        <link rel="icon" href="/favicon.png" type="image/x-icon">
+        
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    </head>
+    
 <body class="body">
 <div class="container">
 
@@ -43,7 +44,7 @@ if (array_key_exists('extant', $_GET)) {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="<?php $basedir ?>">Disc Catalog</a>
+      <a class="navbar-brand" href="<?php $baseurl ?>">Disc Catalog</a>
     </div>
 
       <form class="navbar-form navbar-left" action="<?php $basedir ?>" method="get" role="search">
@@ -70,7 +71,7 @@ else if ($disc_id == "") {
             <thead>
                 <tr>
                 <th>Printed Label</th>
-                <th>Volume Label</th>
+                <th>Volume Name</th>
                 <th>Disposition</th>
                 </tr>
             </thead>
@@ -86,5 +87,9 @@ else if ($disc_id == "") {
 ?>
 </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
 </body>
 </html>
