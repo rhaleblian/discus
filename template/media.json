@@ -1,6 +1,6 @@
 {
   "host": "remotehost",
-  "username": "user",
+  "user": "user",
   "password": "pass",
-  "db"  : "media"
+  "database"  : "discus"
 }

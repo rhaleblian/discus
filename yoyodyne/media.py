@@ -38,9 +38,9 @@ def config_path():
 def connect():
     conf = json.load(open(config_path()))
     return pymysql.connect(conf['host'],
-                           conf['username'],
+                           conf['user'],
                            conf['password'],
-                           conf['db'])
+                           conf['database'])
 
 
 def add(disc, label=None):
