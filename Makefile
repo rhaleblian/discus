@@ -1,7 +1,7 @@
 PREFIX=$(HOME)
 PYTHON_SITE=$(PREFIX)/lib/python/site-packages
-DESTSSH=halebs@haleblian.com
-DESTDIR=$(DESTSSH):public_html/ray/discus
+DESTSSH=rhaleblian@discus
+DESTDIR=$(DESTSSH):/var/www/html/discus
 
 include platform/Makefile.$(shell uname)
 
