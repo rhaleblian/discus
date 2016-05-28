@@ -91,13 +91,14 @@ values ('%s', %s, NULL, 0);""" % (escape(disc), labelexpr)
     rows = cursor.execute(sql)
     if rows == 0:
         print 'warning: no rows inserted'
-    iid = cursor.lastrowid
 
+    iid = cursor.lastrowid
     walkroot = path
-    sql = ""
+    sql = """insert into file
+                (name,dir,disc_id,bytes,mtime)
+                values ("""
     for root, _unused, files in os.walk(walkroot):
         root = re.sub('\\\\', '/', root)
-        print root
         for name in files:
             try:
                 stats = os.stat(root + '/' + name)
@@ -107,15 +108,13 @@ values ('%s', %s, NULL, 0);""" % (escape(disc), labelexpr)
             root = re.sub(path, '', root)
             t_mod = time.strftime("%Y-%m-%d",
                                   time.localtime(stats.st_mtime))
-            sql += """insert into file
-                (name,dir,disc_id,bytes,mtime)
-                values ('%s','%s',%d,'%s','%s');
-                """ % (escape(name),
-                       escape(root),
-                       iid,
-                       stats.st_size,
-                       t_mod)
-    rows = cursor.execute(sql)
+            sql += """'%s','%s',%d,'%s','%s'""" % (escape(name),
+                                                   escape(root),
+                                                   iid,
+                                                   stats.st_size,
+                                                   t_mod)
+        sql += """);"""
+        cursor.execute(sql)
 
 
 def search(term, field='file'):
