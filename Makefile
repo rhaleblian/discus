@@ -5,8 +5,7 @@ DESTDIR=$(DESTSSH):/var/www/html/discus
 
 include platform/Makefile.$(shell uname)
 
-install: install-client install-server
-uninstall: uninstall-client
+default:
 
 install-client:
 	install -d $(PREFIX)/bin
