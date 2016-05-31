@@ -1,7 +1,7 @@
 <?php
 
 function connect() {
-  $ini_path = getenv('DOCUMENT_ROOT') . '/../media.ini';
+  $ini_path = getenv('/etc/yoyodyne/media.ini';
   $ini_array = parse_ini_file($ini_path);
   $conn = mysql_connect($ini_array["host"],
                         $ini_array["user"],
