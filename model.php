@@ -1,13 +1,13 @@
 <?php
 
 function connect() {
-  $ini_path = getenv('/etc/yoyodyne/media.ini';
-  $ini_array = parse_ini_file($ini_path);
-  $conn = mysql_connect($ini_array["host"],
-                        $ini_array["user"],
-                        $ini_array["password"]);
-  $result = mysql_select_db($ini_array["database"]);
-  return $conn;
+    $ini_path = '/etc/yoyodyne/media.ini';
+    $ini_array = parse_ini_file($ini_path);
+    $conn = mysql_connect($ini_array["host"],
+        $ini_array["user"],
+        $ini_array["password"]);
+    $result = mysql_select_db($ini_array["database"]);
+    return $conn;
 }
 
 function status_string($code) {
@@ -57,7 +57,6 @@ function echo_discs($extant) {
 
 function echo_disc_contents($disc_id) {
 	# Echo disc contents.
-
 	$sql  = "select file.* from disc";
 	$sql .= " inner join file on disc.id=file.disc_id";
 	$sql .= " where disc.id = '" . $disc_id . "'";
@@ -81,7 +80,6 @@ function echo_disc_contents($disc_id) {
 
 function echo_disc_contents_flat($disc_id) {
 	# Echo disc contents traditionally - as relative paths from the disc root.
-
 	$sql  = "select file.* from disc";
 	$sql .= " inner join file on disc.id=file.disc_id";
 	$sql .= " where disc.id = '" . $disc_id . "'";
@@ -101,23 +99,18 @@ function echo_disc_contents_flat($disc_id) {
 }
 
 function search($term) {
-    echo "<h2>Search results for '", $term, "'</h2>";
-    echo '<table class="table">';
-    echo '<thead><tr><td>disc</td><td>file</td><td>folder</td></tr></thead>';
-    echo '<tbody>';
-    $sql = "SELECT * FROM entry WHERE name LIKE '%" . $term . "%' OR dir LIKE '%" . $term . "%' LIMIT 256;";
-    #echo "<p>" . $sql . "</p>\n";
+    # Return rows where term was found in names.
+    $wildcard = "%" . $term . "%";
+    $sql  = "SELECT * FROM disc INNER JOIN file ON disc.id=file.disc_id";
+    $sql .= " WHERE file.dir LIKE '" . $wildcard . "'";
+    $sql .= " OR disc.label LIKE '" . $wildcard . "'";
+    $sql .= " OR file.name LIKE '" . $wildcard . "';";
     $result = mysql_query($sql);
     $rows = array();
-	  while ($row = mysql_fetch_assoc($result)) {
-	    echo "<tr>";
-	    echo "<td>", $row['disc_label'], "</td>";
-	    echo "<td>", $row['name'], "</td>";
-	    echo "<td>", $row['dir'], "</td>";
-      echo "</tr>";
-		  $rows[] = $row;
-	  }
-    echo "</tbody></table>";
+    while ($row = mysql_fetch_assoc($result)) {
+        $rows[] = $row;
+    }
+    return $rows;
 }
 
 ?>
