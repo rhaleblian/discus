@@ -14,7 +14,7 @@ A web app provides file and disc name retrieval.
 ### Web App
 
     ssh remotehost
-    mkdir $HOME/.config/yoyodyne/media.ini
+    mkdir /etc/yoyodyne
     cp template/media.ini $HOME/.config/yoyodyne/media.ini
     make install-server
     
