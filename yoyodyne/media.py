@@ -82,10 +82,14 @@ def add(disc, label=None):
 
     connection = connect()
     cursor = connection.cursor()
+
     if label and len(label):
         labelexpr = "'%s'" % escape(label)
     else:
         labelexpr = 'NULL'
+
+    # Define the new disc.
+
     sql = """insert into disc (name, label, format, status)
 values ('%s', %s, NULL, 0);""" % (escape(disc), labelexpr)
     rows = cursor.execute(sql)
@@ -93,8 +97,12 @@ values ('%s', %s, NULL, 0);""" % (escape(disc), labelexpr)
         print 'warning: no rows inserted'
     iid = cursor.lastrowid
 
+    # Insert paths in chunks of 128 statements.
+
+    chunksize = 128
     walkroot = path
     sql = ""
+    count = 0
     for root, _unused, files in os.walk(walkroot):
         root = re.sub('\\\\', '/', root)
         print root
@@ -115,7 +123,14 @@ values ('%s', %s, NULL, 0);""" % (escape(disc), labelexpr)
                        iid,
                        stats.st_size,
                        t_mod)
-    rows = cursor.execute(sql)
+            count += 1
+            if count > chunksize:
+                cursor.execute(sql)
+                count = 0
+                sql = ""
+
+    if len(sql):
+        cursor.execute(sql)
 
 
 def search(term, field='file'):
