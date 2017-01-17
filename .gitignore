@@ -2,6 +2,8 @@
 *.pyc
 /.project
 /.pydevproject
+/build
+/discus.egg-info
 /info.php
 .DS_Store
 .idea
