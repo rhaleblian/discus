@@ -1,3 +1,5 @@
+![The MIT License](http://img.shields.io/badge/license-MIT-blue.svg)
+
 # discus
 
 *discus* is a system that keeps catalogs of files on optical discs.
@@ -7,7 +9,7 @@ which allow the user to drag and drop an optical disc to be catalogued.
 
 A web app provides file and disc name retrieval.
 
-![screenshot](http://discus-rhaleblian.c9users.io/README.png "Screen Shot")
+![screenshot](https://github.com/rhaleblian/discus/blob/master/README.png)
 
 ## Configuration
 
