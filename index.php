@@ -4,7 +4,7 @@
 require 'model.php';
 
 $baseurl = 'ray/discus';
-connect();
+$pdo = connect();
 
 $term = "";
 if (array_key_exists('search', $_GET)) {
@@ -64,7 +64,7 @@ if ($term != "") {
     echo '<table class="table">';
     echo '<thead><tr><td>Disc</td><td>File</td><td>Folder</td></tr></thead>';
     echo '<tbody>';
-    $rows = search($term);
+    $rows = search($pdo, $term);
     foreach ($rows as $row) {
         echo "<tr>";
         echo "<td>", $row['label'], "</td>";
@@ -88,13 +88,13 @@ else if ($disc_id == "") {
                             </tr>
                         </thead>
                         <tbody>
-<?php echo_discs($extant); ?>
+<?php echo_discs($pdo, $extant); ?>
                         </tbody>
                     </table>
                 </div>
 <?php
 } else {
-    echo_disc_contents($disc_id);
+    echo_disc_contents($pdo, $disc_id);
 }
 ?>
             </div>
