@@ -4,7 +4,7 @@
     Called by shell script.
 """
 import json, os, time, re, platform
-import pymysql
+import sqlalchemy
 
 
 def escape(expr):
@@ -35,17 +35,19 @@ def config_path():
         return os.path.join(os.getenv('HOME'), '.config', 'yoyodyne', 'media.json')
 
 
-def connect():
+def engine():
     conf = json.load(open(config_path()))
-    return pymysql.connect(conf['host'],
-                           conf['user'],
-                           conf['password'],
-                           conf['database'])
+    return sqlalchemy.create_engine(conf['url'])
+
+
+def connect():
+    return engine().connect()
 
 
 def add(disc, label=None):
     """ Add disc contents to index. """
     disc = re.sub('/$', '', disc)
+
     if platform.system() == 'Windows':
         import win32api
         mountpoint = os.path.split(disc)[0]
@@ -76,12 +78,12 @@ def add(disc, label=None):
         path = disc
         disc = os.path.split(path)[1]
 
-    print 'Volume:', disc, 'Writing:', label, 'Path:', path
+    print 'Volume Label:', disc, 'Printed Label:', label, 'Path:', path
     if not os.path.exists(path):
+        logging.error('fatal: cannot find path.')
         return
 
-    connection = connect()
-    cursor = connection.cursor()
+    cursor = connection = connect()
 
     if label and len(label):
         labelexpr = "'%s'" % escape(label)
@@ -95,7 +97,8 @@ values ('%s', %s, NULL, 0);""" % (escape(disc), labelexpr)
     rows = cursor.execute(sql)
     if rows == 0:
         print 'warning: no rows inserted'
-    iid = cursor.lastrowid
+    result = cursor.execute('select id from disc order by id desc limit 1')
+    iid = result.fetchone()[0]
 
     # Insert paths in chunks of 128 statements.
 
