@@ -94,10 +94,11 @@ def add(disc, label=None):
 
     sql = """insert into disc (name, label, format, status)
 values ('%s', %s, NULL, 0);""" % (escape(disc), labelexpr)
-    rows = cursor.execute(sql)
+    rows = cursor.execute(sqlalchemy.text(sql))
     if rows == 0:
         print 'warning: no rows inserted'
-    result = cursor.execute('select id from disc order by id desc limit 1')
+    sql = 'select id from disc order by id desc limit 1'
+    result = cursor.execute(sqlalchemy.text(sql))
     iid = result.fetchone()[0]
 
     # Insert paths in chunks of 128 statements.
@@ -128,12 +129,12 @@ values ('%s', %s, NULL, 0);""" % (escape(disc), labelexpr)
                        t_mod)
             count += 1
             if count > chunksize:
-                cursor.execute(sql)
+                cursor.execute(sqlalchemy.text(sql))
                 count = 0
                 sql = ""
 
     if len(sql):
-        cursor.execute(sql)
+        cursor.execute(sqlachemy.text(sql))
 
 
 def search(term, field='file'):
@@ -149,22 +150,20 @@ def search(term, field='file'):
         sql += 'file.name'
     sql += " like '%%%s%%';" % term
 
-    connection = connect()
-    cursor = connection.cursor()
-    rows = cursor.execute(sql)
+    cursor = connect()
+    rows = cursor.execute(sqlalchemy.text(sql))
     if not rows:
         return
-    rows = cursor.fetchall()
-    for row in rows:
+    for row in rows.fetchall():
         print row
-
+    
 
 def dumpnosql(table_name):
     sql = """select * from %s;""" % table_name
     print sql
     connection = connect()
     cursor = connection.cursor()
-    rows = cursor.execute(sql)
+    rows = cursor.execute(sqlalchemy.text(sql))
     if not rows:
         return
     rows = cursor.fetchall()
@@ -172,45 +171,3 @@ def dumpnosql(table_name):
     for row in rows:
         print row
 
-
-def upgrade(args):
-    (disc_id) = args
-    connection = connect()
-    cursor = connection.cursor()
-
-    rows = cursor.execute('select label,name from disc '
-                          'where id = %s',
-                          disc_id)
-    if not rows:
-        return
-    rows = cursor.fetchone()
-    # The label is printed on the surface,
-    # the name is the filesystem's volume label.
-    disclabel, discname = rows
-    if not discname:
-        discname = disclabel
-
-    rows = cursor.execute('select id,disc_id,dir,name from file '
-                          'where disc_id = %s;',
-                          disc_id)
-    if not rows:
-        return
-    rows = cursor.fetchall()
-    for row in rows:
-        idd, disc_idd, d, n = row
-        if not d:
-            continue
-        dnew = d
-        if re.match('^\.', d):
-            dnew = '/'
-        elif re.match('^\./', d):
-            dnew = re.sub('^\./', '/', d)
-        elif re.match('^/Volumes/%s' % discname, d):
-            dnew = re.sub('^/Volumes/%s' % discname, '', d)
-        dnew = re.sub("^'", "", dnew)
-        dnew = re.sub("'$", "", dnew)
-        print idd, disc_idd, dnew, n
-        if dnew != d:
-            cursor.execute('update file set dir = %s '
-                           'where id = %s;',
-                           (dnew, idd))
