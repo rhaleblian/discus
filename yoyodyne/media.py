@@ -134,7 +134,7 @@ values ('%s', %s, NULL, 0);""" % (escape(disc), labelexpr)
                 sql = ""
 
     if len(sql):
-        cursor.execute(sqlachemy.text(sql))
+        cursor.execute(sqlalchemy.text(sql))
 
 
 def search(term, field='file'):
@@ -156,7 +156,7 @@ def search(term, field='file'):
         return
     for row in rows.fetchall():
         print row
-    
+
 
 def dumpnosql(table_name):
     sql = """select * from %s;""" % table_name
@@ -170,4 +170,3 @@ def dumpnosql(table_name):
     items = []
     for row in rows:
         print row
-
