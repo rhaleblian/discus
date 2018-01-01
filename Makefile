@@ -1,7 +1,6 @@
-PREFIX=$(HOME)
+PREFIX=$(HOME)/.local
 PYTHON_SITE=$(PREFIX)/lib/python/site-packages
-DESTSSH=rhaleblian@discus
-DESTDIR=$(DESTSSH):/var/www/html/discus
+DESTDIR=/var/www/discus
 
 include platform/Makefile.$(shell uname)
 
@@ -15,9 +14,10 @@ install-client:
 	install yoyodyne/media.py $(PYTHON_SITE)/yoyodyne
 
 install-server:
-	scp favicon.png $(DESTDIR)
-	scp index.php $(DESTDIR)
-	scp model.php $(DESTDIR)
+	install -d $(DESTDIR)
+	install favicon.png $(DESTDIR)
+	install index.php $(DESTDIR)
+	install model.php $(DESTDIR)
 
 uninstall-client:
 	- rm $(PREFIX)/bin/media
@@ -26,4 +26,7 @@ uninstall-client:
 	- rmdir $(PYTHON_SITE)/yoyodyne
 
 uninstall-server:
-	ssh $(DESTSSH) rm -r public_html/ray/discus
+	- rm $(DESTDIR)/index.php
+	- rm $(DESTDIR)/model.php
+	- rm $(DESTDIR)/favicon.png
+	- rmdir $(DESTDIR)
