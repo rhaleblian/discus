@@ -1,0 +1,8 @@
+sqlalchemy
+
+
+# Debian 9
+# apt:php-fpm
+# apt:nginx
+# apt:postgres-all
+
