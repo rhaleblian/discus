@@ -1,16 +1,18 @@
 <?php
 
 function connect() {
+    # read credentials and return a PDO instance.
+
     $ini_path = '/etc/yoyodyne/media.ini';
     $ini = parse_ini_file($ini_path);
-    $pdo = new PDO('pgsql:host=' . $ini['host'] 
-    . ';dbname=' . $ini['database']
-    . ';user=' . $ini['user'] 
-    . ';password=' . $ini['password']); 
+    $dns = $ini['driver'] . ':host=' . $ini['host'] . ';dbname=' . $ini['database'];
+    $pdo = new PDO($dns, $ini['user'], $ini['password']);
     return $pdo; 
 } 
 
 function status_string($code) { 
+    # return a printable for $code.
+
     if ($code == 0) { return "extant"; } 
     else { return "non-extant"; } 
 } 
@@ -24,7 +26,7 @@ function disc_label($pdo, $id) {
 } 
 
 function html_disc_row($row) { 
-	# return HTML for a row from the disc table. 
+    # return HTML for a row from the disc table. 
 
     $id = $row['id']; 
 	$name = $row['name']; 
@@ -50,7 +52,7 @@ function echo_discs($pdo, $extant) {
 } 
 
 function echo_disc_contents($pdo, $disc_id) { 
-	# Echo disc contents. 
+    # Echo disc contents. 
 
     $sql  = "select file.* from disc"; 
 	$sql .= " inner join file on disc.id=file.disc_id"; 
@@ -73,7 +75,7 @@ function echo_disc_contents($pdo, $disc_id) {
 } 
 
 function echo_disc_contents_flat($pdo, $disc_id) { 
-	# Echo disc contents traditionally -
+    # Echo disc contents traditionally -
     # as relative paths from the disc root. 
 
     $sql  = "select file.* from disc"; 
