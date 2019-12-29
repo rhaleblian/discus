@@ -1,11 +1,12 @@
 *~
 *.pyc
+.DS_Store
+.idea
+build
+dist
 /.project
 /.pydevproject
 /build
 /discus.egg-info
 /info.php
-.DS_Store
-.idea
-build
-dist
+/venv

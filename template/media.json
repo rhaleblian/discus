@@ -1,6 +1,4 @@
 {
-  "host": "remotehost",
-  "user": "user",
-  "password": "pass",
-  "database"  : "discus"
+  "help": "https://docs.sqlalchemy.org/en/13/core/engines.html",
+  "url": "sqlite:///discus.sqlite"
 }
