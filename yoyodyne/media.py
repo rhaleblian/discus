@@ -4,8 +4,14 @@
     Called by shell script.
 """
 import json, os, time, re, platform
+import logging
 import sqlalchemy
+import tabulate
 
+if platform.system() == 'Windows':
+    import win32api  # pylint: disable=import-error
+
+logging.basicConfig()
 
 def escape(expr):
     """
@@ -49,7 +55,6 @@ def add(disc, label=None):
     disc = re.sub('/$', '', disc)
 
     if platform.system() == 'Windows':
-        import win32api
         mountpoint = os.path.split(disc)[0]
         mountpoint = re.sub(r'\\', '', mountpoint)
         path = mountpoint
@@ -83,7 +88,7 @@ def add(disc, label=None):
         logging.error('fatal: cannot find path.')
         return
 
-    cursor = connection = connect()
+    cursor = connect()
 
     if label and len(label):
         labelexpr = "'%s'" % escape(label)
@@ -136,10 +141,33 @@ values ('%s', %s, NULL, 0);""" % (escape(disc), labelexpr)
     if len(sql):
         cursor.execute(sqlalchemy.text(sql))
 
+def eject():
+    raise NotImplementedError
+
+def files(disc_id):
+    """ return: disc ID, dir, filename """
+    cursor = connect()
+    metadata = sqlalchemy.schema.MetaData(bind=cursor)
+    table = sqlalchemy.Table('file', metadata, autoload=True)
+
+    select = sqlalchemy.sql.expression.select
+    statement = select([table.c.dir, table.c.name]).where(table.c.disc_id == disc_id).order_by(table.c.dir)
+    return cursor.execute(statement).fetchall()
+
+def discs():
+    """ return: disc names and IDs """
+    cursor = connect()
+    metadata = sqlalchemy.schema.MetaData(bind=cursor)
+    table = sqlalchemy.Table('disc', metadata, autoload=True)
+    
+    select = sqlalchemy.sql.expression.select
+    statement = select([table.c.id, table.c.name, table.c.label]).order_by(table.c.id)
+    return cursor.execute(statement).fetchall()
 
 def search(term, field='file'):
     """ Return rows in index containing pattern :term:. """
 
+    # TODO rewrite for sqlalchemy
     sql = """select disc.label,file.dir,file.name from disc
              inner join file on disc.id = file.disc_id where """
     if field == 'dir':
@@ -148,25 +176,12 @@ def search(term, field='file'):
         sql += "disc.label"
     elif field == 'file':
         sql += 'file.name'
-    sql += " like '%%%s%%';" % term
+    sql += " like '%%%s%%'" % term
+    sql += " order by disc.label, file.dir, file.name"
+    sql += ";"
 
     cursor = connect()
-    rows = cursor.execute(sqlalchemy.text(sql))
-    if not rows:
-        return
-    for row in rows.fetchall():
-        print row
+    return cursor.execute(sqlalchemy.text(sql))
 
-
-def dumpnosql(table_name):
-    sql = """select * from %s;""" % table_name
-    print sql
-    connection = connect()
-    cursor = connection.cursor()
-    rows = cursor.execute(sqlalchemy.text(sql))
-    if not rows:
-        return
-    rows = cursor.fetchall()
-    items = []
-    for row in rows:
-        print row
+def display(selection):
+    print(tabulate.tabulate(selection))

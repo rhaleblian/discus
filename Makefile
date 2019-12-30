@@ -6,6 +6,14 @@ include platform/Makefile.$(shell uname)
 
 default:
 
+venv:
+	virtualenv venv
+
+install-venv: venv
+	cp media venv/bin
+	- rm -r venv/lib/python2.7/site-packages/yoyodyne
+	cp -r yoyodyne venv/lib/python2.7/site-packages
+
 install-client:
 	install -d $(PREFIX)/bin
 	install media $(PREFIX)/bin

@@ -3,12 +3,12 @@
 function connect() {
     # read credentials and return a PDO instance.
 
-    $ini_path = '/etc/yoyodyne/media.ini';
+    $ini_path = './template/media.ini';
     $ini = parse_ini_file($ini_path);
     $dns = $ini['driver'] . ':host=' . $ini['host'] . ';dbname=' . $ini['database'];
     $pdo = new PDO($dns, $ini['user'], $ini['password']);
     return $pdo; 
-} 
+}
 
 function status_string($code) { 
     # return a printable for $code.
