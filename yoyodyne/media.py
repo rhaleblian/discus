@@ -1,9 +1,13 @@
-#!/usr/bin/env python
 """
     Operations on optical media catalog.
     Called by shell script.
 """
-import json, os, time, re, platform
+import argparse
+import json
+import os
+import time
+import re
+import platform
 import sqlalchemy
 
 
@@ -170,3 +174,40 @@ def dumpnosql(table_name):
     items = []
     for row in rows:
         print row
+
+def command_add(args):
+    add(args.path, args.label)
+
+
+def command_search(args):
+    search(args.term, field=args.field)
+
+
+def command_eject(args):
+    eject()
+
+
+def main():
+    parser = argparse.ArgumentParser(description="""
+    Operations on the optical media library.
+    """)
+    subparsers = parser.add_subparsers(title='subcommands')
+
+    parser_add = subparsers.add_parser('add')
+    parser_add.add_argument('--label',
+                            help='ignore volume label on media, use LABEL')
+    parser_add.add_argument('path',
+                            help='path to media (name when dropped on shortcut)')
+    parser_add.set_defaults(func=command_add)
+
+    parser_search = subparsers.add_parser('search')
+    parser_search.add_argument('--field', default='file')
+    parser_search.add_argument('term',
+                               help='search file and folder names for this term')
+    parser_search.set_defaults(func=command_search)
+
+    parser_eject = subparsers.add_parser('eject')
+    parser_eject.set_defaults(func=command_eject)
+
+    args = parser.parse_args()
+    args.func(args)
