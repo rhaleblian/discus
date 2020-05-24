@@ -6,6 +6,9 @@ include platform/Makefile.$(shell uname)
 
 default:
 
+install:
+	python setup.py install
+
 install-client:
 	install -d $(PREFIX)/bin
 	install media $(PREFIX)/bin
