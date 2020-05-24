@@ -1,6 +1,3 @@
 {
-  "host": "remotehost",
-  "user": "user",
-  "password": "pass",
-  "database"  : "discus"
+	"url": "sqlite:////var/lib/discus/discus.db"
 }
