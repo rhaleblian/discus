@@ -33,3 +33,6 @@ uninstall-server:
 	- rm $(DESTDIR)/model.php
 	- rm $(DESTDIR)/favicon.png
 	- rmdir $(DESTDIR)
+
+clean:
+	- find . -name *.pyc -or -name __pycache__ -delete
