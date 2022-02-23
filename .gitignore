@@ -1,4 +1,5 @@
 *~
+*.bak
 *.pyc
 /.project
 /.pydevproject
@@ -9,3 +10,4 @@
 .idea
 build
 dist
+__pycache__

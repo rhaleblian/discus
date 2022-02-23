@@ -138,6 +138,9 @@ def add(disc, label=None):
 
         # Insert files for this disc.
 
+        count = 0
+        # Don't let the transaction get too large.
+        chunksize = 256
         for root, dirs, files in os.walk(path):
             for filename in files:
                 dirname = re.sub(path, '', root)
@@ -153,6 +156,12 @@ def add(disc, label=None):
                     mtime = None
                 row = File(name=filename, dir=dirname, disc_id=iid, bytes=stats.st_mtime, mtime=mtime)
                 session.add(row)
+            count += 1
+            if count >= chunksize:
+                print('= committing progress...')
+                count = 0
+                session.commit()
+        print('= performing final commit.')
         session.commit()
 
 
