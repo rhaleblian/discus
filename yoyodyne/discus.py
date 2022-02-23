@@ -161,6 +161,8 @@ def get_largest_disc_id(engine):
 
 
 def get_volume_label(path):
+    label = None
+    
     if platform.system() == 'Windows':
         try:
             import win32api
@@ -189,6 +191,8 @@ def get_volume_label(path):
         mountpoint = '/cygdrive/d'
         label = mountpoint
 
+    if not label:
+        label = os.path.split(path)[1]
     return label
 
 
