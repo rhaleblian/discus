@@ -27,7 +27,7 @@ class File(Base):
     name = sqlalchemy.Column(sqlalchemy.String(128))
     dir = sqlalchemy.Column(sqlalchemy.String(256))
     mtime = sqlalchemy.Column(sqlalchemy.DateTime)
-    bytes = sqlalchemy.Column(sqlalchemy.Integer)
+    bytes = sqlalchemy.Column(sqlalchemy.BigInteger)
 
 
 class Disc(Base):
