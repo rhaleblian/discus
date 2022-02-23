@@ -4,19 +4,37 @@
 """
 import argparse
 import json
+import logging
 import os
 import time
 import re
 import platform
+from typing import Sequence
 import sqlalchemy
+import sqlalchemy.orm
+
+Base = sqlalchemy.orm.declarative_base()
 
 
-def escape(expr):
-    """
-    :param expr: str
-    :return: str, backslash-escaped expr
-    """
-    return re.sub('\'', '\\\'', expr)
+class File(Base):
+    __tablename__ = 'file'
+    id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.Sequence('file_id_seq'), primary_key=True)
+    disc_id = sqlalchemy.Column(sqlalchemy.Integer)
+    name = sqlalchemy.Column(sqlalchemy.String(128))
+    dir = sqlalchemy.Column(sqlalchemy.String(256))
+    mtime = sqlalchemy.Column(sqlalchemy.DateTime)
+    bytes = sqlalchemy.Column(sqlalchemy.Integer)
+
+
+class Disc(Base):
+    __tablename__ = 'disc'
+    id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.Sequence('disc_id_seq'), primary_key=True)
+    name = sqlalchemy.Column(sqlalchemy.String(32))
+    label = sqlalchemy.Column(sqlalchemy.String(64))
+    status = sqlalchemy.Column(sqlalchemy.Integer)
+
+
+#Session = sqlalchemy.orm.sessionmaker()
 
 
 def month_as_integer(abbrev):
@@ -39,152 +57,135 @@ def config_path():
         return os.path.join(os.getenv('HOME'), '.config', 'yoyodyne', 'media.json')
 
 
-def engine():
+def create_engine():
     conf = json.load(open(config_path()))
-    return sqlalchemy.create_engine(conf['url'])
+    engine = sqlalchemy.create_engine(conf['url'])
+    return engine
 
 
 def connect():
-    return engine().connect()
+    engine = create_engine()
+    # Session.configure(bind=engine)
+    return engine.connect()
+
+
+def create():
+    Base.metadata.create_all(connect())
 
 
 def add(disc, label=None):
-    """ Add disc contents to index. """
-    disc = re.sub('/$', '', disc)
+    """ Add disc contents. """
+    engine = create_engine()
+    with sqlalchemy.orm.Session(engine) as session:
 
-    if platform.system() == 'Windows':
-        import win32api
-        mountpoint = os.path.split(disc)[0]
-        mountpoint = re.sub(r'\\', '', mountpoint)
-        path = mountpoint
-        volinfo = win32api.GetVolumeInformation(mountpoint)
-        if volinfo:
-            disc = volinfo[0]
-            #disc_format = volinfo[4]
-            if not label:
-                label = disc
-    elif platform.system() == 'Darwin':
-        # Allow passing the disc name
-        # or a path to the mountpoint.
-        path = '/Volumes'
-        if not re.match('/', disc):
-            # Automator passes a disc name as an
-            # classic-style Volume designator.
-            disc = re.sub(':$', '', disc)
-            path = os.path.join(path, disc)
+        # Infer disc volume label from path.
+
+        disc = re.sub('/$', '', disc)
+        if platform.system() == 'Windows':
+            import win32api
+            mountpoint = os.path.split(disc)[0]
+            mountpoint = re.sub(r'\\', '', mountpoint)
+            path = mountpoint
+            volinfo = win32api.GetVolumeInformation(mountpoint)
+            if volinfo:
+                disc = volinfo[0]
+                #disc_format = volinfo[4]
+                if not label:
+                    label = disc
+        elif platform.system() == 'Darwin':
+            # Allow passing the disc name
+            # or a path to the mountpoint.
+            path = '/Volumes'
+            if not re.match('/', disc):
+                # Automator passes a disc name as an
+                # classic-style Volume designator.
+                disc = re.sub(':$', '', disc)
+                path = os.path.join(path, disc)
+            else:
+                path = disc
+                disc = os.path.split(path)[1]
+        elif re.match('CYGWIN.+', platform.system()):
+            mountpoint = '/cygdrive/d'
+            path = mountpoint
         else:
             path = disc
             disc = os.path.split(path)[1]
-    elif re.match('CYGWIN.+', platform.system()):
-        mountpoint = '/cygdrive/d'
-        path = mountpoint
-    else:
-        path = disc
-        disc = os.path.split(path)[1]
+        if not label:
+            label = disc
 
-    print 'Volume Label:', disc, 'Printed Label:', label, 'Path:', path
-    if not os.path.exists(path):
-        logging.error('fatal: cannot find path.')
-        return
+        print('= volume label:', disc)
+        print('= printed label:', label)
+        print('= mounted path:', path)
 
-    cursor = connection = connect()
+        if not os.path.exists(path):
+            logging.error('fatal: cannot find mounted path.')
+            return
 
-    if label and len(label):
-        labelexpr = "'%s'" % escape(label)
-    else:
-        labelexpr = 'NULL'
+        # Define the new disc.
 
-    # Define the new disc.
+        row = Disc(name=disc, label=label, status=0)
+        session.add(row)
+        # Commit now so we can fetch the id.
+        session.commit()
 
-    sql = """insert into disc (name, label, format, status)
-values ('%s', %s, NULL, 0);""" % (escape(disc), labelexpr)
-    rows = cursor.execute(sqlalchemy.text(sql))
-    if rows == 0:
-        print 'warning: no rows inserted'
-    sql = 'select id from disc order by id desc limit 1'
-    result = cursor.execute(sqlalchemy.text(sql))
-    iid = result.fetchone()[0]
+        # Get the disc id.
 
-    # Insert paths in chunks of 128 statements.
+        sql = 'select id from disc order by id desc limit 1'
+        connection = engine.connect()
+        result = connection.execute(sqlalchemy.text(sql))
+        iid = result.fetchone()[0]
+        print('= disc id', iid)
 
-    chunksize = 128
-    walkroot = path
-    sql = ""
-    count = 0
-    for root, _unused, files in os.walk(walkroot):
-        root = re.sub('\\\\', '/', root)
-        print root
-        for name in files:
-            try:
-                stats = os.stat(root + '/' + name)
-            except OSError:
-                pass
+        # Insert files for this disc.
 
-            root = re.sub(path, '', root)
-            t_mod = time.strftime("%Y-%m-%d",
-                                  time.localtime(stats.st_mtime))
-            sql += """insert into file
-                (name,dir,disc_id,bytes,mtime)
-                values ('%s','%s',%d,'%s','%s');
-                """ % (escape(name),
-                       escape(root),
-                       iid,
-                       stats.st_size,
-                       t_mod)
-            count += 1
-            if count > chunksize:
-                cursor.execute(sqlalchemy.text(sql))
-                count = 0
-                sql = ""
+        for root, dirs, files in os.walk(path):
+            for filename in files:
+                dirname = re.sub(path, '', root)
+                print('= visiting', dirname)
+                statpath = os.path.join(root, filename)
+                try:
+                    stats = os.stat(statpath)
+                    bytes = stats.st_size
+                    mtime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(stats.st_mtime))
+                except Exception as e:
+                    print('! could not stat "{0}"'.format(statpath))
+                    bytes = None
+                    mtime = None
+                row = File(name=filename, dir=dirname, disc_id=iid, bytes=stats.st_mtime, mtime=mtime)
+                session.add(row)
+        session.commit()
 
-    if len(sql):
-        cursor.execute(sqlalchemy.text(sql))
+
+def list_discs():
+    engine = create_engine()
+    with sqlalchemy.orm.Session(engine) as session:
+        for row in session.query(Disc).all():
+            print(row.id, row.name, row.label, row.status)
 
 
 def search(term, field='file'):
-    """ Return rows in index containing pattern :term:. """
+    """ Return rows in index containing :term:. """
+    engine = create_engine()
+    with sqlalchemy.orm.Session(engine) as session:
+        for row in session.query(File).filter(File.name.like('%{0}%'.format(term))):
+            disc = session.query(Disc).filter(Disc.id == row.disc_id).first()
+            print(disc.name, '"{0}"'.format(os.path.join(row.dir, row.name)))
 
-    sql = """select disc.label,file.dir,file.name from disc
-             inner join file on disc.id = file.disc_id where """
-    if field == 'dir':
-        sql += "dir.name"
-    elif field == 'disc':
-        sql += "disc.label"
-    elif field == 'file':
-        sql += 'file.name'
-    sql += " like '%%%s%%';" % term
-
-    cursor = connect()
-    rows = cursor.execute(sqlalchemy.text(sql))
-    if not rows:
-        return
-    for row in rows.fetchall():
-        print row
-
-
-def dumpnosql(table_name):
-    sql = """select * from %s;""" % table_name
-    print sql
-    connection = connect()
-    cursor = connection.cursor()
-    rows = cursor.execute(sqlalchemy.text(sql))
-    if not rows:
-        return
-    rows = cursor.fetchall()
-    items = []
-    for row in rows:
-        print row
 
 def command_add(args):
     add(args.path, args.label)
 
 
+def command_help(args):
+    print('try -h.')
+
+
+def command_list(args):
+    list_discs()
+
+
 def command_search(args):
     search(args.term, field=args.field)
-
-
-def command_eject(args):
-    eject()
 
 
 def main():
@@ -192,6 +193,7 @@ def main():
     Operations on the optical media library.
     """)
     subparsers = parser.add_subparsers(title='subcommands')
+    parser.set_defaults(func=command_help)
 
     parser_add = subparsers.add_parser('add')
     parser_add.add_argument('--label',
@@ -206,8 +208,8 @@ def main():
                                help='search file and folder names for this term')
     parser_search.set_defaults(func=command_search)
 
-    parser_eject = subparsers.add_parser('eject')
-    parser_eject.set_defaults(func=command_eject)
+    parser_eject = subparsers.add_parser('list')
+    parser_eject.set_defaults(func=command_list)
 
     args = parser.parse_args()
     args.func(args)
