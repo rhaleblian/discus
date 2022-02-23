@@ -12,6 +12,7 @@ import platform
 from typing import Sequence
 import sqlalchemy
 import sqlalchemy.orm
+import subprocess
 
 Base = sqlalchemy.orm.declarative_base()
 
@@ -78,38 +79,8 @@ def add(disc, label=None):
     engine = create_engine()
     with sqlalchemy.orm.Session(engine) as session:
 
-        # Infer disc volume label from path.
-
         disc = re.sub('/$', '', disc)
-        if platform.system() == 'Windows':
-            import win32api
-            mountpoint = os.path.split(disc)[0]
-            mountpoint = re.sub(r'\\', '', mountpoint)
-            path = mountpoint
-            volinfo = win32api.GetVolumeInformation(mountpoint)
-            if volinfo:
-                disc = volinfo[0]
-                #disc_format = volinfo[4]
-                if not label:
-                    label = disc
-        elif platform.system() == 'Darwin':
-            # Allow passing the disc name
-            # or a path to the mountpoint.
-            path = '/Volumes'
-            if not re.match('/', disc):
-                # Automator passes a disc name as an
-                # classic-style Volume designator.
-                disc = re.sub(':$', '', disc)
-                path = os.path.join(path, disc)
-            else:
-                path = disc
-                disc = os.path.split(path)[1]
-        elif re.match('CYGWIN.+', platform.system()):
-            mountpoint = '/cygdrive/d'
-            path = mountpoint
-        else:
-            path = disc
-            disc = os.path.split(path)[1]
+        get_volume_label(disc)
         if not label:
             label = disc
 
@@ -181,6 +152,40 @@ def search(term, field='file'):
             print(disc.name, '"{0}"'.format(os.path.join(row.dir, row.name)))
 
 
+def get_volume_label(path):
+    if platform.system() == 'Windows':
+        try:
+            import win32api
+            mountpoint = os.path.split(path)[0]
+            mountpoint = re.sub(r'\\', '', mountpoint)
+            volinfo = win32api.GetVolumeInformation(mountpoint)
+            if volinfo:
+                label = volinfo[0]
+                #disc_format = volinfo[4]
+        except:
+            label = None
+
+    elif platform.system() == 'Darwin':
+        # Allow passing the disc name
+        # or a path to the mountpoint.
+        #     subprocess.run(['diskutil', 'info', path], stdout=subprocess.PIPE)
+        if not re.match('/', path):
+            # Automator passes a disc name as an
+            # classic-style Volume designator.
+            path = re.sub(':$', '', path)
+            label = os.path.join('/Volumes', path)
+        else:
+            label = None
+
+    elif re.match('CYGWIN.+', platform.system()):
+        mountpoint = '/cygdrive/d'
+        label = mountpoint
+
+    if not label:
+        label = os.path.split[1]    
+    return label
+
+
 def command_add(args):
     add(args.path, args.label)
 
@@ -206,19 +211,19 @@ def main():
 
     parser_add = subparsers.add_parser('add')
     parser_add.add_argument('--label',
-                            help='ignore volume label on media, use LABEL')
+                            help='use LABEL instead of inferring it from mountpoint')
     parser_add.add_argument('path',
                             help='path to media (name when dropped on shortcut)')
     parser_add.set_defaults(func=command_add)
+
+    parser_eject = subparsers.add_parser('list')
+    parser_eject.set_defaults(func=command_list)
 
     parser_search = subparsers.add_parser('search')
     parser_search.add_argument('--field', default='file')
     parser_search.add_argument('term',
                                help='search file and folder names for this term')
     parser_search.set_defaults(func=command_search)
-
-    parser_eject = subparsers.add_parser('list')
-    parser_eject.set_defaults(func=command_list)
 
     args = parser.parse_args()
     args.func(args)
