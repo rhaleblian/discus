@@ -226,7 +226,7 @@ def main():
 
     parser_eject = subparsers.add_parser('list')
     parser_eject.set_defaults(func=command_list)
-
+ 
     parser_search = subparsers.add_parser('search')
     parser_search.add_argument('--field', default='file')
     parser_search.add_argument('term',
