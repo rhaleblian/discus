@@ -14,6 +14,9 @@ import sqlalchemy
 import sqlalchemy.orm
 import subprocess
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger('discus')
+
 Base = sqlalchemy.orm.declarative_base()
 
 
@@ -74,38 +77,34 @@ def create():
     Base.metadata.create_all(connect())
 
 
-def add(disc, label=None):
-    """ Add disc contents. """
+def add(path, sharpie=None):
+    """ Add disc contents.
+        param path: mountpoint.
+        param sharpie: written label. """
+
+    path = os.path.realpath(path)
+    if not os.path.exists(path):
+        logging.error('fatal: cannot find mount path.')
+        return
+
+    name = get_volume_label(path)
+    if not sharpie:
+        sharpie = name
+
+    print('= mountpoint:', path)
+    print('= volume label:', name)
+    print('= printed label:', sharpie)
+
     engine = create_engine()
     with sqlalchemy.orm.Session(engine) as session:
 
-        disc = re.sub('/$', '', disc)
-        get_volume_label(disc)
-        if not label:
-            label = disc
-
-        print('= volume label:', disc)
-        print('= printed label:', label)
-        print('= mounted path:', path)
-
-        if not os.path.exists(path):
-            logging.error('fatal: cannot find mounted path.')
-            return
-
         # Define the new disc.
 
-        row = Disc(name=disc, label=label, status=0)
+        row = Disc(name=name, label=sharpie, status=0)
         session.add(row)
         # Commit now so we can fetch the id.
         session.commit()
-
-        # Get the disc id.
-
-        sql = 'select id from disc order by id desc limit 1'
-        connection = engine.connect()
-        result = connection.execute(sqlalchemy.text(sql))
-        iid = result.fetchone()[0]
-        print('= disc id', iid)
+        iid = get_largest_disc_id(engine)
 
         # Insert files for this disc.
 
@@ -116,16 +115,16 @@ def add(disc, label=None):
             dirname = re.sub(path, '', root)
             print('= visiting', dirname)
             for filename in files:
-                statpath = os.path.join(root, filename)
+                abspath = os.path.join(root, filename)
                 try:
-                    stats = os.stat(statpath)
+                    stats = os.stat(abspath)
                     bytes = stats.st_size
                     mtime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(stats.st_mtime))
                 except Exception as e:
-                    print('! could not stat "{0}"'.format(statpath))
+                    print('! could not stat "{0}"'.format(abspath))
                     bytes = None
                     mtime = None
-                row = File(name=filename, dir=dirname, disc_id=iid, bytes=stats.st_mtime, mtime=mtime)
+                row = File(name=filename, dir=dirname, disc_id=iid, bytes=bytes, mtime=mtime)
                 session.add(row)
             count += 1
             if count >= chunksize:
@@ -150,6 +149,15 @@ def search(term, field='file'):
         for row in session.query(File).filter(File.name.like('%{0}%'.format(term))):
             disc = session.query(Disc).filter(Disc.id == row.disc_id).first()
             print(disc.name, '"{0}"'.format(os.path.join(row.dir, row.name)))
+
+
+def get_largest_disc_id(engine):
+    sql = 'select id from disc order by id desc limit 1'
+    with engine.connect() as connection:
+        result = connection.execute(sqlalchemy.text(sql))
+        iid = result.fetchone()[0]
+        print('= disc id', iid)
+    return iid
 
 
 def get_volume_label(path):
@@ -182,7 +190,7 @@ def get_volume_label(path):
         label = mountpoint
 
     if not label:
-        label = os.path.split[1]    
+        label = os.path.split(path)[1]
     return label
 
 
