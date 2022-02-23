@@ -142,9 +142,9 @@ def add(disc, label=None):
         # Don't let the transaction get too large.
         chunksize = 256
         for root, dirs, files in os.walk(path):
+            dirname = re.sub(path, '', root)
+            print('= visiting', dirname)
             for filename in files:
-                dirname = re.sub(path, '', root)
-                print('= visiting', dirname)
                 statpath = os.path.join(root, filename)
                 try:
                     stats = os.stat(statpath)
