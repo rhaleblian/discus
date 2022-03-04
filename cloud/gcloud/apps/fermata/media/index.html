@@ -1,0 +1,9 @@
+{% if discs %}
+    <ul>
+    {% for disc in discs %}
+        <li><a href="/media/{{ disc.id }}/">{{ disc.label }} ( {{ disc.name }} )</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>The catalog is empty.</p>
+{% endif %}
