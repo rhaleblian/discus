@@ -74,6 +74,21 @@ def connect():
 
 
 def create():
+    # with connect() as connection:
+    #     pass
+    #     sql = '''
+    #     CREATE DATABASE discus;
+    #     CREATE ROLE discus WITH
+    #         LOGIN
+    #         SUPERUSER
+    #         CREATEDB
+    #         CREATEROLE
+    #         INHERIT
+    #         REPLICATION
+    #         CONNECTION LIMIT -1
+    #         PASSWORD 'discus';
+    #     '''
+    #     connection.
     Base.metadata.create_all(connect())
 
 
